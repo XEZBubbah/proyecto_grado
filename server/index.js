@@ -4,10 +4,12 @@ import mongoose  from "mongoose";
 import cors from "cors";
 
 import menuRoutes from './routes/menu_Principal.js';
+import login from './routes/login.js';
 
 const app = express();
 
 app.use('/menu', menuRoutes);
+app.use('/login', login);
 
 app.use(bodyParser.json({ limit: '30mb', extended:true}))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended:true}))
