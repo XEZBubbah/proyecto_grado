@@ -1,5 +1,5 @@
-import axios from 'axios';
+import axios from  'axios';
+const API = axios.create({baseURL: 'http://localhost:5000/'});
 
-const url = 'http://localhost:5000/login';
-
-export const fetchPosts = () => axios.get(url); 
+export const signin = (formData) => API.post('/user/signin', formData);
+export const signup = (formData) => API.post('/user/signup', formData);
