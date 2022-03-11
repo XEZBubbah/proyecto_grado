@@ -14,13 +14,13 @@ const UsuariosAppMovilSchema = mongoose.Schema({
     Contraseña: {type: String, required:true},
     Foto_Perfil: {type: Buffer}
 });
-module.exports = mongoose.model("UsuariosAppMovil",UsuariosAppMovilSchema);
+module.exports.UsuariosAppMovil = mongoose.model("UsuariosAppMovil",UsuariosAppMovilSchema);
 
 //Tipos de reporte enviados por un usuario registrado en la aplicacion movil
 const Tipo_ReporteSchema = mongoose.Schema({
     Tipo_Reporte: {type: String, required:true},
 });
-module.exports = mongoose.model("Tipo_Reporte",Tipo_ReporteSchema);
+module.exports.Tipo_Reporte = mongoose.model("Tipo_Reporte",Tipo_ReporteSchema);
 
 //Itinerarios
 const ItinerariosSchema = mongoose.Schema({
@@ -34,7 +34,7 @@ const ItinerariosSchema = mongoose.Schema({
     Grupos_Id: {type: SchemaTypes.ObjectId, required:true},
     Grupos_Nombre_Grupo: {type: String, required:true}
 });
-module.exports = mongoose.model("Itinerarios",ItinerariosSchema);
+module.exports.Itinerarios = mongoose.model("Itinerarios",ItinerariosSchema);
 
 //Grupos
 const GruposSchema = mongoose.Schema({
@@ -44,7 +44,7 @@ const GruposSchema = mongoose.Schema({
     UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
     UAppMov_Usuario: {type: String, required:true}
 });
-module.exports = mongoose.model("Grupos",GruposSchema);
+module.exports.Grupos = mongoose.model("Grupos",GruposSchema);
 
 //Historico de reportes enviados por un usuario registrado en la aplicacion movil
 const ReportesSchema = mongoose.Schema({
@@ -56,5 +56,5 @@ const ReportesSchema = mongoose.Schema({
     UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
     UAppMov_Usuario: {type: String, required:true}
 });
-module.exports = mongoose.model("Reportes",ReportesSchema);
+module.exports.Reportes = mongoose.model("Reportes",ReportesSchema);
 ///////////////////////////////

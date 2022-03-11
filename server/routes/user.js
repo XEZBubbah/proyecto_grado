@@ -2,8 +2,8 @@
 //import { signin, signup } from '../controllers/user.js';
 
 const express = require("express");
-const signin = require("../controllers/user.js");
-const signup = require("../controllers/user.js");
+const signin = require("../controllers/userAdmin.js");
+const signup = require("../controllers/userAdmin.js");
 var router = express.Router();
 
 router.post('/signin', signin.signin);

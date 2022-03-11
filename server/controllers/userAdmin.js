@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const UsuariosAdmin = require("./../models/webModel");
+const User = require("./../models/webModel");
 
 const secret = 'test';
 
@@ -8,7 +8,7 @@ exports.signin = async(req,res) => {
 	const { email, password } = req.body;
 	try {
 		console.log(email,password);
-		const existingUser = await UsuariosAdmin.findOne({ Correo: email });
+		const existingUser = await User.UsuariosAdmin.findOne({ Correo: email });
 		if(!existingUser) return res.status(404).json({ message: "El usuario no existe"});
 		const isPasswordCorrect = await bcrypt.compare(password, existingUser.contraseña);
 		
@@ -25,12 +25,12 @@ exports.signin = async(req,res) => {
 exports.signup = async(req,res) => {
 	const {email, password, confirmPassword, firstName, lastName} = req.body;
 	try {
-		const existingUser = await UsuariosAdmin.findOne({ Correo:email });
+		const existingUser = await User.UsuariosAdmin.findOne({ Correo:email });
 		if(existingUser) return res.status(400).json({ message: "El usuario ya existe"});
 		if(password !== confirmPassword) return res.status(400).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
 		console.log(email, password, firstName);
-		const result = await UsuariosAdmin.create({
+		const result = await User.UsuariosAdmin.create({
 			Correo: email, 
 			Contraseña: hashedPassword, 
 			Nombre: firstName, 
