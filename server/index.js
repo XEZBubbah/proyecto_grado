@@ -8,7 +8,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const userRoutes = require("./routes/user.js");
+const userAdminRoutes = require("./routes/userAdmin");
+const userMovilRoutes = require("./routes/userMovil");
 const config = require("./cors.js");
 
 const app = express();
@@ -16,7 +17,9 @@ const app = express();
 app.use(bodyParser.json({ limit: '30mb', extended:true}));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended:true}));
 app.use(cors());
-app.use('/user', userRoutes);
+app.use('/user', userAdminRoutes);
+app.use('/user', userMovilRoutes);
+
 //Conexión base de datos mongoDB
 const BD = 'ciclorrutaDB';
 const USER = 'jparra305';
