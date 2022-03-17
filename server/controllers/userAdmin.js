@@ -7,13 +7,13 @@ const secret = 'test';
 exports.signin = async(req,res) => {
 	const {email, password} = req.body;
 	try {
-		console.log(email,password);
-		const existingUser = await User.UsuariosAdmin.findOne({ Correo: email });
+		console.log("corre" + email,password);
+		const existingUser = await User.UsuariosAdmin.findOne({Correo: email });
 		if(!existingUser) return res.status(404).json({ message: "El usuario no existe"});
-		const isPasswordCorrect = await bcrypt.compare(password, existingUser.contraseña);
+		const isPasswordCorrect = await bcrypt.compare(password, existingUser.Contraseña);
 		if(!isPasswordCorrect) return res.status(404).json({ message:"La contraseña no es correcta"});
 
-		const token = jwt.sign({email: existingUser.email, id: existingUser._id}, secret, {expiresIn: "1h"});
+		const token = jwt.sign({Correo: existingUser.Correo, id: existingUser._id}, secret, {expiresIn: "1h"});
 
 		res.status(200).json({result:existingUser, token});
 	} catch (error) {
@@ -24,7 +24,7 @@ exports.signin = async(req,res) => {
 exports.signup = async(req,res) => {
 	const {email, password, confirmPassword, firstName, lastName} = req.body;
 	try {
-		const existingUser = await User.UsuariosAdmin.findOne({ Correo:email });
+		const existingUser = await User.UsuariosAdmin.findOne({Correo: email });
 		if(existingUser) return res.status(400).json({ message: "El usuario ya existe"});
 		if(password !== confirmPassword) return res.status(400).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);

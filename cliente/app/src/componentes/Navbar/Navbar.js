@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 const Navbar = () => {
 
     const classes = useStyles();
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const dispatch = useDispatch();
     const history = useNavigate();
     const location = useLocation();
@@ -36,7 +36,7 @@ const Navbar = () => {
       <Toolbar className={classes.toolbar}>
         {user?.result ? (
           <div className={classes.profile}>
-            <Avatar className={classes.purple} alt={user?.result.nombre} src={user?.result.imageUrl}>{user?.result.nombre.charAt(0)}</Avatar>
+            <Avatar className={classes.purple} alt={user?.result.nombre} src={user?.result.imageUrl}>{user?.result.Nombre.charAt(0)}</Avatar>
             <Typography className={classes.userName} variant="h6">{user?.result.nombre}</Typography>
             <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Cerrar Sesión</Button>
           </div>

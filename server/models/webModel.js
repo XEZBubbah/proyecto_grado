@@ -21,5 +21,6 @@ const UsuariosAdminSchema = mongoose.Schema({
     Contraseña: {type: String, required:true},
     Reportes_Id: {type: SchemaTypes.ObjectId}
 });
+
 module.exports.UsuariosAdmin = mongoose.model("UsuariosAdmin",UsuariosAdminSchema);
 ///////////////////////////////

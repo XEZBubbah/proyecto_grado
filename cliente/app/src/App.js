@@ -3,7 +3,7 @@ import Navbar from "./componentes/Navbar/Navbar";
 import { Container } from "@material-ui/core";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from "./componentes/Home/Home";
-import Auth from "./componentes/auth/Auth";
+import Auth from "./componentes/Auth/Auth";
 
 const App = () => {
     return(
