@@ -27,7 +27,7 @@ exports.signup = async(req,res) => {
 	try {
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
 		if(existingUser) return res.status(400).json({ message: "El usuario ya existe"});
-		if(password !== confirmPassword) return res.status(400).json({ message: "Las contraseñas no coinciden"});
+		//if(password !== confirmPassword) return res.status(400).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
 		console.log(email, password, firstName);
 		const result = await User.UsuariosAppMovil.create({
