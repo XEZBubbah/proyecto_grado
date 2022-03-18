@@ -24,11 +24,11 @@ module.exports.Tipo_Reporte = mongoose.model("Tipo_Reporte",Tipo_ReporteSchema);
 
 //Itinerarios
 const ItinerariosSchema = mongoose.Schema({
-    Hora_Salida: {type: Date, required:true},
-    Hora_Llegada: {type: Date},
+    Hora_Salida: {type: String, required:true},
+    Hora_Llegada: {type: String},
     Punto_Partida: {type: String, required:true},
     Punto_Llegada: {type: String, required:true},
-    Descripcion: {type: Date},
+    Descripcion: {type: String},
     UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
     UAppMov_Usuario: {type: String, required:true},
     Grupos_Id: {type: SchemaTypes.ObjectId, required:true},
@@ -39,6 +39,7 @@ module.exports.Itinerarios = mongoose.model("Itinerarios",ItinerariosSchema);
 //Grupos
 const GruposSchema = mongoose.Schema({
     Nombre_Grupo: {type: String, required:true},
+    Descripcion: {type: String},
     Visibilidad: {type: String, required:true},
     Contraseña_Grupo: {type: String, required:true},
     UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
