@@ -41,7 +41,7 @@ const GruposSchema = mongoose.Schema({
     Nombre_Grupo: {type: String, required:true},
     Descripcion: {type: String},
     Visibilidad: {type: String, required:true},
-    Contraseña_Grupo: {type: String, required:true},
+    Contraseña_Grupo: {type: String, required:false},
     UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
     UAppMov_Usuario: {type: String, required:true}
 });
