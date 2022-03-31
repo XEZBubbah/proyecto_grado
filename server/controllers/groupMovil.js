@@ -52,7 +52,6 @@ exports.fetchGroup = async(req,res) => {
         //Filtrar documentos quitando informacion de campos sin interes para esta funcion
         Object.keys(groups).map(key => {
             groups[key].Contraseña_Grupo = null
-            groups[key].Descripcion = null,
             groups[key].UAppMov_Id = null
         });
 
@@ -79,7 +78,6 @@ exports.fetchUserGroup = async(req,res) => {
         //Filtrar documentos quitando informacion de campos sin interes para esta funcion
         Object.keys(existingGroups).map(key => {
             existingGroups[key].Contraseña_Grupo = null
-            existingGroups[key].Descripcion = null,
             existingGroups[key].UAppMov_Id = null
         });
 
