@@ -26,6 +26,7 @@ exports.signup = async(req,res) => {
 	const {email, password, confirmPassword, firstName, lastName, userName, birthDate, phone} = req.body;
 	try {
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
+		User.UsuariosAppMovil.findOneAndUpdate({})
 		if(existingUser) return res.status(400).json({ message: "El usuario ya existe"});
 		//if(password !== confirmPassword) return res.status(400).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
@@ -63,4 +64,46 @@ exports.fetchUserInfo = async(req,res) => {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
 	}
+}
+
+exports.deleteUserAccount = async(req,res) => {
+	const { Usuario } = req.body;
+	try {
+		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario });
+		
+		if(!existingUser) return res.status(400).json({ message: "No existe el usuario"});
+		res.status(200).json({
+			result: {
+				Nombre: existingUser.Nombre,
+				Apellido: existingUser.Apellido,
+				Correo: existingUser.Correo,
+			}
+		});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
+
+exports.modifyUserInfo = async(req, res) => {
+	const {email, userNameOld, userNameNew, phone} = req.body;
+
+	const existingUserOld = await User.UsuariosAppMovil.findOne({Usuario: userNameOld});
+	if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
+
+	const existingUserNew = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
+	const existingEmail = await User.UsuariosAppMovil.findOne({Correo: email});
+	if(existingUserNew) return res.status(400).json({message: "Este nombre de usuario ya se encuentra en uso"});
+	if(existingEmail) return res.status(400).json({message: "Este correo electrónico ya se encuentra en uso"});
+
+	const filter = { Usuario: userNameOld, };
+	const update = { Usuario: userNameNew,Correo: email,Celular: phone };
+	const opts = { new: true };
+
+	let modifyUser = await User.UsuariosAppMovil.findOneAndUpdate(filter, update, opts);
+	modifyUser = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
+
+	res.status(200).json({
+		result: modifyUser
+	});
 }

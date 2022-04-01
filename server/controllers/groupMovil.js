@@ -14,7 +14,6 @@ exports.createGroup = async(req,res) => {
         const user_Id = user.id;
         console.log("Usuario Grupo");
         console.log(user);
-
 		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: user_Id});
         if(existingGroup) return res.status(400).json({ message: "Ya existe un grupo con el mismo nombre"});
         console.log(existingGroup);
