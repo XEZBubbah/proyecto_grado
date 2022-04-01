@@ -46,3 +46,21 @@ exports.signup = async(req,res) => {
 		console.log(error);
 	}
 }
+
+exports.fetchUserInfo = async(req,res) => {
+	const { Usuario } = req.body;
+	try {
+		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario });
+		if(!existingUser) return res.status(400).json({ message: "No existe el usuario"});
+		res.status(200).json({
+			result: {
+				Nombre: existingUser.Nombre,
+				Apellido: existingUser.Apellido,
+				Correo: existingUser.Correo,
+			}
+		});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
