@@ -87,23 +87,34 @@ exports.deleteUserAccount = async(req,res) => {
 
 exports.modifyUserInfo = async(req, res) => {
 	const {email, userNameOld, userNameNew, phone} = req.body;
-
 	const existingUserOld = await User.UsuariosAppMovil.findOne({Usuario: userNameOld});
-	if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
+	if(!existingUserOld) return res.status(200).json({message: "No existe un usuario asociado"});
+	var update = {};
 
-	const existingUserNew = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
-	const existingEmail = await User.UsuariosAppMovil.findOne({Correo: email});
-	if(existingUserNew) return res.status(400).json({message: "Este nombre de usuario ya se encuentra en uso"});
-	if(existingEmail) return res.status(400).json({message: "Este correo electrónico ya se encuentra en uso"});
-
-	const filter = { Usuario: userNameOld, };
-	const update = { Usuario: userNameNew,Correo: email,Celular: phone };
+	if(email === ""){
+		console.log('Email vacio')
+	}else{
+		update.Correo = email;
+		const existingEmail = await User.UsuariosAppMovil.findOne({Correo: email});
+		if(existingEmail) return res.status(200).json({message: "Este correo electrónico ya se encuentra en uso"});
+	}
+	if(userNameNew === ""){
+		console.log('Username vacio')
+	} else{
+		update.Usuario = userNameNew;
+		const existingUserNew = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
+		if(existingUserNew) return res.status(200).json({message: "Este nombre de usuario ya se encuentra en uso"});
+	} 
+	if(phone === ""){
+		console.log('Phone vacio')
+	}else{
+		update.Celular = phone;
+	}
+	const filter = { Usuario: userNameOld };
 	const opts = { new: true };
-
 	let modifyUser = await User.UsuariosAppMovil.findOneAndUpdate(filter, update, opts);
-	modifyUser = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
-
+	//modifyUser = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
 	res.status(200).json({
-		result: modifyUser
+		result: 'Se ha modificado la información con exito'
 	});
 }
