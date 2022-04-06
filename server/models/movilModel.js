@@ -12,7 +12,7 @@ const UsuariosAppMovilSchema = mongoose.Schema({
     Celular: {type: String, required:true},
     Correo: {type: String, required:true},
     Contraseña: {type: String, required:true},
-    Foto_Perfil: {type: Buffer}
+    Avatar: {type: Buffer}
 });
 module.exports.UsuariosAppMovil = mongoose.model("UsuariosAppMovil",UsuariosAppMovilSchema);
 
@@ -58,4 +58,16 @@ const ReportesSchema = mongoose.Schema({
     UAppMov_Usuario: {type: String, required:true}
 });
 module.exports.Reportes = mongoose.model("Reportes",ReportesSchema);
+
+//Historico de chats relacionados a un usuario/grupo
+const chatGrupo = mongoose.Schema({
+    Avatar: {type: Buffer},
+    Mensaje: {type: String, required:true},
+    Fecha_Creacion: {type: Date, required:true},
+    Grupos_Id: {type: SchemaTypes.ObjectId, required:true},
+    Grupos_Nombre_Grupo: {type: String, required:true},
+    UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
+    UAppMov_Usuario: {type: String, required:true}
+});
+module.exports.chatGrupo = mongoose.model("chatGrupo",chatGrupo);
 ///////////////////////////////
