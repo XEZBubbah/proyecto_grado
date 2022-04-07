@@ -66,6 +66,23 @@ exports.fetchUserInfo = async(req,res) => {
 	}
 }
 
+exports.fetchAllUsers = async(req,res) => {
+	try {
+		const allUsers = await User.UsuariosAppMovil.find({});
+		console.log("Usuarios registrados en la APPMovil");
+		console.log(allUsers);
+		//Filtrar documentos quitando informacion de campos sin interes para esta funcion
+		Object.keys(allUsers).map(key => {
+            allUsers[key]._id = null
+            allUsers[key].Contraseña = null
+        });
+		res.status(200).json({result: allUsers});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
+
 exports.deleteUserAccount = async(req,res) => {
 	const { Usuario } = req.body;
 	try {
