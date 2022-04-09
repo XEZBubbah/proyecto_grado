@@ -32,6 +32,7 @@ exports.createGroup = async(req,res) => {
             Nombre_Grupo: Nombre_Grupo,
             Descripcion: Descripcion,
             Visibilidad: visibility,
+            Permiso: 'A',
             Contraseña_Grupo: hashedPassword,
             UAppMov_Id: user_Id,
             UAppMov_Usuario: Usuario
