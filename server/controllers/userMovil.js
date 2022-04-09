@@ -11,10 +11,10 @@ exports.signin = async(req,res) => {
 	try {
 		console.log(userName,password);
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: userName});
-		if(!existingUser) return res.status(200).json({ message: "El usuario no existe"});
+		if(!existingUser) return res.status(400).json({ message: "El usuario no existe"});
 		
 		const isPasswordCorrect = await bcrypt.compare(password, existingUser.Contraseña);
-		if(!isPasswordCorrect) return res.status(200).json({ message:"La contraseña no es correcta"});
+		if(!isPasswordCorrect) return res.status(400).json({ message:"La contraseña no es correcta"});
 
 		const token = jwt.sign({Usuario: existingUser.userName, id: existingUser._id}, secret, {expiresIn: "1h"});
 		res.status(200).json({result:existingUser, token});
@@ -29,7 +29,7 @@ exports.signup = async(req,res) => {
 	try {
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
 		User.UsuariosAppMovil.findOneAndUpdate({})
-		if(existingUser) return res.status(200).json({message: "El usuario ya existe"});
+		if(existingUser) return res.status(400).json({message: "El usuario ya existe"});
 		//if(password !== confirmPassword) return res.status(200).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
 		console.log(email, password, firstName);
