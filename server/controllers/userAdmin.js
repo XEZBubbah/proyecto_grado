@@ -154,7 +154,7 @@ exports.deleteUserAccountAdmin = async(req,res) => {
 		//Extrae las llaves para iterar sobre reportesUser con esta estructura [{},{},{}]
 		var indices_G = Object.keys(reportesUser)
 		for(iter of indices_G) {
-			objeto[iter]["Estado"] = 'F'
+			reportesUser[iter]["Estado"] = 'F'
 		}
 
 		//Eliminacion del usuario
@@ -184,7 +184,7 @@ exports.deleteUserAccountMovil = async(req,res) => {
 		//Extrae las llaves para iterar sobre itinerariosUser con esta estructura [{},{},{}]
 		var indices_I = Object.keys(itinerariosUser)
 		for(iter of indices_I) {
-			var id_Itinerario = objeto[iter]["_id"];
+			var id_Itinerario = itinerariosUser[iter]["_id"];
 			var itinerarioDeleted = await Itinerario.Itinerarios.findByIdAndDelete({_id: id_Itinerario});
   			console.log(id_Itinerario);
 			console.log(itinerarioDeleted);
@@ -197,7 +197,7 @@ exports.deleteUserAccountMovil = async(req,res) => {
 		//Extrae las llaves para iterar sobre itinerariosUser con esta estructura [{},{},{}]
 		var indices_G = Object.keys(gruposUser)
 		for(iter of indices_G) {
-			var id_Grupo = objeto[iter]["_id"];
+			var id_Grupo = gruposUser[iter]["_id"];
 			var grupoDeleted = await Grupo.Grupos.findByIdAndDelete({_id: id_Grupo});
   			console.log(id_Grupo);
 			console.log(grupoDeleted);

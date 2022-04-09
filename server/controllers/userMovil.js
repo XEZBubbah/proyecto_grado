@@ -11,10 +11,10 @@ exports.signin = async(req,res) => {
 	try {
 		console.log(userName,password);
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: userName});
-		if(!existingUser) return res.status(404).json({ message: "El usuario no existe"});
+		if(!existingUser) return res.status(200).json({ message: "El usuario no existe"});
 		
 		const isPasswordCorrect = await bcrypt.compare(password, existingUser.Contraseña);
-		if(!isPasswordCorrect) return res.status(404).json({ message:"La contraseña no es correcta"});
+		if(!isPasswordCorrect) return res.status(200).json({ message:"La contraseña no es correcta"});
 
 		const token = jwt.sign({Usuario: existingUser.userName, id: existingUser._id}, secret, {expiresIn: "1h"});
 		res.status(200).json({result:existingUser, token});
@@ -29,8 +29,8 @@ exports.signup = async(req,res) => {
 	try {
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
 		User.UsuariosAppMovil.findOneAndUpdate({})
-		if(existingUser) return res.status(400).json({message: "El usuario ya existe"});
-		//if(password !== confirmPassword) return res.status(400).json({ message: "Las contraseñas no coinciden"});
+		if(existingUser) return res.status(200).json({message: "El usuario ya existe"});
+		//if(password !== confirmPassword) return res.status(200).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
 		console.log(email, password, firstName);
 
@@ -67,7 +67,7 @@ exports.fetchUserInfo = async(req,res) => {
 	const { Usuario } = req.body;
 	try {
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario });
-		if(!existingUser) return res.status(400).json({ message: "No existe el usuario"});
+		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
 		res.status(200).json({
 			result: {
 				Nombre: existingUser.Nombre,
@@ -116,7 +116,7 @@ exports.deleteUserAccount = async(req,res) => {
 		//Extrae las llaves para iterar sobre itinerariosUser con esta estructura [{},{},{}]
 		var indices_I = Object.keys(itinerariosUser)
 		for(iter of indices_I) {
-			var id_Itinerario = objeto[iter]["_id"];
+			var id_Itinerario = itinerariosUser[iter]["_id"];
 			var itinerarioDeleted = await Itinerario.Itinerarios.findByIdAndDelete({_id: id_Itinerario});
   			console.log(id_Itinerario);
 			console.log(itinerarioDeleted);
@@ -129,7 +129,7 @@ exports.deleteUserAccount = async(req,res) => {
 		//Extrae las llaves para iterar sobre itinerariosUser con esta estructura [{},{},{}]
 		var indices_G = Object.keys(gruposUser)
 		for(iter of indices_G) {
-			var id_Grupo = objeto[iter]["_id"];
+			var id_Grupo = gruposUser[iter]["_id"];
 			var grupoDeleted = await Grupo.Grupos.findByIdAndDelete({_id: id_Grupo});
   			console.log(id_Grupo);
 			console.log(grupoDeleted);
