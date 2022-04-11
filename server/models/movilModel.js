@@ -12,15 +12,9 @@ const UsuariosAppMovilSchema = mongoose.Schema({
     Celular: {type: String, required:true},
     Correo: {type: String, required:true},
     Contraseña: {type: String, required:true},
-    Foto_Perfil: {type: Buffer}
+    Avatar: {type: Buffer, contentType: String}
 });
 module.exports.UsuariosAppMovil = mongoose.model("UsuariosAppMovil",UsuariosAppMovilSchema);
-
-//Tipos de reporte enviados por un usuario registrado en la aplicacion movil
-const Tipo_ReporteSchema = mongoose.Schema({
-    Tipo_Reporte: {type: String, required:true},
-});
-module.exports.Tipo_Reporte = mongoose.model("Tipo_Reporte",Tipo_ReporteSchema);
 
 //Itinerarios
 const ItinerariosSchema = mongoose.Schema({
@@ -37,19 +31,35 @@ const ItinerariosSchema = mongoose.Schema({
 module.exports.Itinerarios = mongoose.model("Itinerarios",ItinerariosSchema);
 
 //Grupos
+//Permiso: Admin => A, Invitado => I
 const GruposSchema = mongoose.Schema({
     Nombre_Grupo: {type: String, required:true},
     Descripcion: {type: String},
     Visibilidad: {type: String, required:true},
     Contraseña_Grupo: {type: String, required:false},
+    Permiso: {type: String, required:false},
     UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
     UAppMov_Usuario: {type: String, required:true}
 });
 module.exports.Grupos = mongoose.model("Grupos",GruposSchema);
 
+//Tipos de reporte enviados por un usuario registrado en la aplicacion movil
+/*
+Tipos de reportes
+Texto           Valor
+Aplicación  => Aplicacion
+Usuario     => Usuario
+*/
+const Tipo_ReporteSchema = mongoose.Schema({
+    Tipo_Reporte: {type: String, required:true},
+});
+module.exports.Tipo_Reporte = mongoose.model("Tipo_Reporte",Tipo_ReporteSchema);
+
 //Historico de reportes enviados por un usuario registrado en la aplicacion movil
+//Estados de un reporte: Nuevo => N, En proceso => P, Finalizado => F
 const ReportesSchema = mongoose.Schema({
     Asunto: {type: String, required:true},
+    Estado: {type: String, required:true},
     Descripcion: {type: String, required:true},
     Fecha_Generado: {type: Date, required:true},
     TipRep_Id: {type: SchemaTypes.ObjectId, required:true},
@@ -58,4 +68,16 @@ const ReportesSchema = mongoose.Schema({
     UAppMov_Usuario: {type: String, required:true}
 });
 module.exports.Reportes = mongoose.model("Reportes",ReportesSchema);
+
+//Historico de chats relacionados a un usuario/grupo
+const chatGrupo = mongoose.Schema({
+    Avatar: {type: Buffer, contentType: String},
+    Mensaje: {type: String, required:true},
+    Fecha_Creacion: {type: Date, required:true},
+    Grupos_Id: {type: SchemaTypes.ObjectId, required:true},
+    Grupos_Nombre_Grupo: {type: String, required:true},
+    UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
+    UAppMov_Usuario: {type: String, required:true}
+});
+module.exports.chatGrupo = mongoose.model("chatGrupo",chatGrupo);
 ///////////////////////////////
