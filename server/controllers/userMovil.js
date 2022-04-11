@@ -4,7 +4,7 @@ const User = require("./../models/movilModel");
 const Grupo = require("./../models/movilModel");
 const Itinerario = require("./../models/movilModel");
 const secret = 'test';
-const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif']
+const multer = require('multer');
 
 exports.signin = async(req,res) => {
 	const { userName, password } =req.body;
@@ -24,16 +24,30 @@ exports.signin = async(req,res) => {
 	}
 }
 
+//define storage for the images
+const storage = multer.diskStorage({
+	//destination for files
+	destination: "uploadImages",
+	//add back the extension
+	filename: function (request, file, callback) {
+	callback(null, Date.now() + file.originalname);
+	},
+});
+//upload parameters for multer
+const upload = multer({
+	storage: storage,
+	limits: {fieldSize: 1024 * 1024 * 3,},
+});
 exports.signup = async(req,res) => {
 	const {email, password, confirmPassword, firstName, lastName, userName, birthDate, phone, avatar} = req.body;
 	try {
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
-		User.UsuariosAppMovil.findOneAndUpdate({})
 		if(existingUser) return res.status(400).json({message: "El usuario ya existe"});
 		//if(password !== confirmPassword) return res.status(200).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
 		console.log(email, password, firstName);
-
+		
+		upload.single("avatar");
 		const result = await User.UsuariosAppMovil.create({
 			Nombre: firstName, 
 			Apellido: lastName,
@@ -41,25 +55,13 @@ exports.signup = async(req,res) => {
 			Fecha_Nacimiento: birthDate,
 			Celular: phone,
 			Correo: email, 
-			Contraseña: hashedPassword 
+			Contraseña: hashedPassword,
+			Avatar: avatar //avatar.filename
 		});
-		//saveAvatarImage(existingUser, avatar);
-			//const newUser = await existingUser.save()
-		const token = jwt.sign({email: result.email, id: result._id}, secret, {expiresIn: "1h"});
-		res.status(200).json({result, token});
+		res.status(200).json({result: result});
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
-	}
-}
-
-function saveAvatarImage(User, EncodedImage) {
-	if(EncodedImage == null) return;
-
-	var img = JSON.parse(EncodedImage);
-	if(img != null && imageMimeTypes.includes(img.type)){
-		User.img = new Buffer.from(img.data, "base64");
-		User.imgType = img.type;
 	}
 }
 

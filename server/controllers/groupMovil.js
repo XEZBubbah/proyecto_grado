@@ -14,8 +14,8 @@ exports.createGroup = async(req,res) => {
         const user_Id = user.id;
         console.log("Usuario Grupo");
         console.log(user);
-		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: user_Id});
-        //Se tiene que revisar esta condicional para que sea general
+        //Se busca la existencia de un grupo con el mismo nombre, sabiendo que el nombre del grupo es único
+		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo});
         if(existingGroup) return res.status(400).json({ message: "Ya existe un grupo con el mismo nombre"});
         console.log(existingGroup);
         var hashedPassword = ''
@@ -66,7 +66,7 @@ exports.fetchUserGroup = async(req,res) => {
 	const { Usuario } = req.body;
 	try {
         const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
-        if(!user) return res.status(400).json({ message: "No se encuentra un usuario relacionado"});
+        if(!user) return res.status(400).json({message: "No se encuentra un usuario relacionado"});
         const user_Id = user.id;
         console.log("Usuario Grupo");
         console.log(user);
