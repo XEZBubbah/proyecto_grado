@@ -147,7 +147,7 @@ exports.deleteUserAccount = async(req,res) => {
 exports.modifyUserInfo = async(req, res) => {
 	const {email, userNameOld, userNameNew, phone} = req.body;
 	const existingUserOld = await User.UsuariosAppMovil.findOne({Usuario: userNameOld});
-	if(!existingUserOld) return res.status(200).json({message: "No existe un usuario asociado"});
+	if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
 	var update = {};
 
 	if(email === ""){
@@ -155,14 +155,14 @@ exports.modifyUserInfo = async(req, res) => {
 	}else{
 		update.Correo = email;
 		const existingEmail = await User.UsuariosAppMovil.findOne({Correo: email});
-		if(existingEmail) return res.status(200).json({message: "Este correo electrónico ya se encuentra en uso"});
+		if(existingEmail) return res.status(400).json({message: "Este correo electrónico ya se encuentra en uso"});
 	}
 	if(userNameNew === ""){
 		console.log('Username vacio');
 	} else{
 		update.Usuario = userNameNew;
 		const existingUserNew = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
-		if(existingUserNew) return res.status(200).json({message: "Este nombre de usuario ya se encuentra en uso"});
+		if(existingUserNew) return res.status(400).json({message: "Este nombre de usuario ya se encuentra en uso"});
 	} 
 	if(phone === ""){
 		console.log('Phone vacio');
