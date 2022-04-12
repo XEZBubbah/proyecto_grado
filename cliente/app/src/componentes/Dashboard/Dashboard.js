@@ -16,12 +16,14 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Title from './Title';
+import Title from './Microcomponents/Title';
+import Clock from './DateItems/Clock';
+import Date from './DateItems/Date'
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import  { mainListItems, secondaryListItems } from './DashList';
+import  { mainListItems, secondaryListItems } from './Microcomponents/DashList';
 
 const drawerWidth = 240;
 
@@ -184,8 +186,10 @@ const logout= () => {
                     >
                       <Title>Bienvenido/a {user?.result.Nombre}</Title>
                       <Typography component="p" variant="h4"></Typography>
+                      <Clock></Clock>
+                      <Date></Date>
                       <Typography color="text.secondary" sx={{ flex: 1 }}>
-                        on 15 March, 2019
+                        Actualmente hay: usuarios.
                       </Typography>
                     </Paper>
                   </Grid>
