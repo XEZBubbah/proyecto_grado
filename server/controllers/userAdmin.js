@@ -47,10 +47,29 @@ exports.signup = async(req,res) => {
 	}
 }
 
+exports.fetchUserCuantity = async(req,res) => {
+	//Agregar imagen
+	try {
+		const allUsers = await UserMov.UsuariosAppMovil.find({});
+		console.log("Usuarios registrados en la APPMovil");
+		console.log(allUsers);
+		//Filtrar documentos quitando informacion de campos sin interes para esta funcion
+		Object.keys(allUsers).map(key => {
+            allUsers[key]._id = null
+            //allUsers[key].Contraseña = null
+        });
+
+		res.status(200).json({result: allUsers.length});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
+
 exports.fetchAllUsers = async(req,res) => {
 	//Agregar imagen
 	try {
-		const allUsers = await User.UsuariosAdmin.find({});
+		const allUsers = await UserMov.UsuariosAppMovil.find({});
 		console.log("Usuarios registrados en la APPMovil");
 		console.log(allUsers);
 		//Filtrar documentos quitando informacion de campos sin interes para esta funcion
