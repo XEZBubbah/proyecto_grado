@@ -182,6 +182,11 @@ const logout= () => {
                         height: 240,
                     }}
                     >
+                      <Title>Bienvenido/a {user?.result.Nombre}</Title>
+                      <Typography component="p" variant="h4"></Typography>
+                      <Typography color="text.secondary" sx={{ flex: 1 }}>
+                        on 15 March, 2019
+                      </Typography>
                     </Paper>
                   </Grid>
                   {/* Recent Deposits */}
@@ -194,9 +199,6 @@ const logout= () => {
                         height: 240,
                       }}
                     >
-                    <Title>
-                      Bienvenido/a
-                    </Title>
                     </Paper>
                   </Grid>
                   {/* Recent Orders */}
