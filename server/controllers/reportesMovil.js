@@ -22,3 +22,19 @@ exports.createReport = async (req, res) => {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
     }
 }
+
+exports.fetchReportMovil = async(req,res) => {
+	const {Usuario} = req.body;
+	try {
+        const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
+        if(!existingUser) return res.status(400).json({ message: "El usuario no existe"});
+        const existingReport = await Reporte.Reportes.find({UAppMov_Id: existingUser.id});
+        Object.keys(existingReport).map(key => {
+            existingReport[key].UAppMov_Usuario = null
+            existingReport[key].UAppMov_Id = null
+        });
+		res.status(200).json({result: existingReport});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+	}
+}
