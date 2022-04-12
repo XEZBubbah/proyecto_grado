@@ -50,10 +50,6 @@ Texto           Valor
 Aplicación  => Aplicacion
 Usuario     => Usuario
 */
-const Tipo_ReporteSchema = mongoose.Schema({
-    Tipo_Reporte: {type: String, required:true},
-});
-module.exports.Tipo_Reporte = mongoose.model("Tipo_Reporte",Tipo_ReporteSchema);
 
 //Historico de reportes enviados por un usuario registrado en la aplicacion movil
 //Estados de un reporte: Nuevo => N, En proceso => P, Finalizado => F
@@ -62,8 +58,7 @@ const ReportesSchema = mongoose.Schema({
     Estado: {type: String, required:true},
     Descripcion: {type: String, required:true},
     Fecha_Generado: {type: Date, required:true},
-    TipRep_Id: {type: SchemaTypes.ObjectId, required:true},
-    TipRep_Tipo: {type: String, required:true},
+    Tipo_Reporte: {type: String, required:true},
     UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
     UAppMov_Usuario: {type: String, required:true}
 });

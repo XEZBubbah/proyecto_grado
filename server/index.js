@@ -12,6 +12,7 @@ const userAdminRoutes = require("./routes/userAdmin");
 const userMovilRoutes = require("./routes/userMovil");
 const groupMovilRoutes = require("./routes/groupMovil");
 const reportAdminRoutes = require("./routes/reporteAdmin");
+const reportMovilRoutes = require("./routes/reportesMovil");
 const config = require("./cors.js");
 
 const app = express();
@@ -21,8 +22,10 @@ app.use(bodyParser.urlencoded({limit: '30mb', extended:true}));
 app.use(cors());
 app.use('/userA', userAdminRoutes);
 app.use('/reportA', reportAdminRoutes);
+app.use('/reportM', reportMovilRoutes);
 app.use('/userM', userMovilRoutes);
 app.use('/groupM', groupMovilRoutes);
+
 
 //Conexión base de datos mongoDB
 const BD = 'ciclorrutaDB';
