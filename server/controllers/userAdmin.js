@@ -11,7 +11,7 @@ const secret = 'test';
 exports.signin = async(req,res) => {
 	const {email, password} = req.body;
 	try {
-		console.log("corre" + email,password);
+		console.log("correo " + email,password);
 		const existingUser = await User.UsuariosAdmin.findOne({Correo: email });
 		if(!existingUser) return res.status(404).json({ message: "El usuario no existe"});
 		const isPasswordCorrect = await bcrypt.compare(password, existingUser.Contraseña);

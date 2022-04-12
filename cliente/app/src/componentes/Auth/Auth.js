@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles';
 import Input from './input';
 import { signin, signup } from '../../actions/auth';
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: ''};
+
 
 const Auth = () => {
 
@@ -38,39 +43,45 @@ const Auth = () => {
       };
 
     return(
-        <Container component="main" maxWidth="xs">
-            <Paper className ={classes.paper} elevation={3}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                <Typography variant="h5">{isSignup ? 'Registrarse' : 'Iniciar Sesión'}</Typography> {/*Modificado*/}
-                <form className={classes.form} onSubmit={handleSubmit}>
-                    <Grid container spacing={2}>
-                        {
-                            isSignup && (
-                                <>
-                                <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
-                                <Input name="lastName" label="Last Name" handleChange={handleChange} half />
-                                </>
-                            )
-                        }
-                        <Input name="email" label="Correo Electrónico" handleChange={handleChange} type = "email"/>
-                        <Input name="password" label="Contraseña" handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword}/>
-                        { isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
-                    </Grid>
-                    <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-                         { isSignup ? 'Crear Cuenta' : 'Iniciar Sesión' }
-                    </Button>
-                    <Grid container justify="flex-end">
-                        <Grid item>
-                            <Button onClick={switchMode}>
-                                { isSignup ? '¿Ya tienes una cuenta? Inicia Sesión' : "¿No tienes cuenta? Crea tu cuenta" }
-                            </Button>
+        
+        <Box sx={{ display: 'flex' }}>
+            <MuiAppBar position="absolute">
+              <Toolbar
+                sx={{
+                  pr: '24px', // keep right padding when drawer closed
+                }}
+              >
+                <Typography
+                  component={Link} to="/home" 
+                  variant="h3"
+                  color="inherit"
+                  noWrap
+                  sx={{ flexGrow: 1 }} 
+                >
+                  BikeApp
+                </Typography>
+                <Button component={Link} to="/signin" variant="contained" color="primary">Iniciar Sesión</Button>
+              </Toolbar>
+            </MuiAppBar>
+            <Container component="main" maxWidth="xs">
+                <Paper className ={classes.paper} elevation={3}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon/>
+                    </Avatar>
+                    <Typography variant="h5">Iniciar Sesión</Typography> {/*Modificado*/}
+                    <form className={classes.form} onSubmit={handleSubmit}>
+                        <Grid container spacing={2}>
+                            <Input name="email" label="Correo Electrónico" handleChange={handleChange} type = "email"/>
+                            <Input name="password" label="Contraseña" handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword}/>
                         </Grid>
-                    </Grid>
-                </form>
-            </Paper>
-        </Container>
+                        <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+                            Iniciar Sesión
+                        </Button>
+                    </form>
+                </Paper>
+            </Container>
+        </Box>
+        
     )
 };
 
