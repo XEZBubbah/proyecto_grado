@@ -4,7 +4,7 @@ const Reporte = require("./../models/movilModel");
 exports.createReport = async (req, res) => {
     const { Asunto,Descripcion,Tipo_Reporte,Usuario} = req.body;
     try {
-        const existingUser = await User.UsuariosAppMovil.findOne({Usuario: userName});
+        const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
         if(!existingUser) return res.status(400).json({ message: "El usuario no existe"});
         const reportes = await Reporte.Reportes.create({ 
             Asunto: Asunto,
