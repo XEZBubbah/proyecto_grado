@@ -148,34 +148,94 @@ exports.deleteUserAccount = async(req,res) => {
 
 exports.modifyUserInfo = async(req, res) => {
 	const {email, userNameOld, userNameNew, phone} = req.body;
-	const existingUserOld = await User.UsuariosAppMovil.findOne({Usuario: userNameOld});
-	if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
-	var update = {};
+	try {
+		const existingUserOld = await User.UsuariosAppMovil.findOne({Usuario: userNameOld});
+		if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
+		var update = {};
 
-	if(email === ""){
-		console.log('Email vacio');
-	}else{
-		update.Correo = email;
-		const existingEmail = await User.UsuariosAppMovil.findOne({Correo: email});
-		if(existingEmail) return res.status(400).json({message: "Este correo electrónico ya se encuentra en uso"});
+		if(email === ""){
+			console.log('Email vacio');
+		}else{
+			update.Correo = email;
+			const existingEmail = await User.UsuariosAppMovil.findOne({Correo: email});
+			if(existingEmail) return res.status(400).json({message: "Este correo electrónico ya se encuentra en uso"});
+		}
+		if(userNameNew === ""){
+			console.log('Username vacio');
+		} else{
+			update.Usuario = userNameNew;
+			const existingUserNew = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
+			if(existingUserNew) return res.status(400).json({message: "Este nombre de usuario ya se encuentra en uso"});
+		} 
+		if(phone === ""){
+			console.log('Phone vacio');
+		}else{
+			update.Celular = phone;
+		}
+		const filter = { Usuario: userNameOld };
+		const opts = { new: true };
+		let modifyUser = await User.UsuariosAppMovil.findOneAndUpdate(filter, update, opts);
+		//modifyUser = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
+		res.status(200).json({
+			result: 'Se ha modificado la información con exito'
+		});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
 	}
-	if(userNameNew === ""){
-		console.log('Username vacio');
-	} else{
-		update.Usuario = userNameNew;
-		const existingUserNew = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
-		if(existingUserNew) return res.status(400).json({message: "Este nombre de usuario ya se encuentra en uso"});
-	} 
-	if(phone === ""){
-		console.log('Phone vacio');
-	}else{
-		update.Celular = phone;
+}
+
+exports.restorePassword = async(req,res) => {
+	const {Usuario, Correo, Nueva_Contra1, Nueva_Contra2} = req.body;
+	try {
+		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario, Correo: Correo});
+		if(!existingUser) return res.status(400).json({
+			message: "No existe un usuario asociado con la información recibida"
+		});
+		//Se hace el hash de la segunda contraseña para compararlas compare(data, encrypted)
+		const hashedPassword2 = await bcrypt.hash(Nueva_Contra2, 12);
+		const checkPasswords = await bcrypt.compare(Nueva_Contra1, hashedPassword2);
+		if(!checkPasswords) return res.status(400).json({message: "Las contraseñas no coinciden"});
+		
+		var update = {};
+		update.Contraseña = hashedPassword2;
+		const filter = {Usuario: Usuario, Correo: Correo};
+		const opts = {new: true};
+		let modifyPassword = await User.UsuariosAppMovil.findOneAndUpdate(filter, update, opts);
+		res.status(200).json({
+			result: 'La contraseña ha sido recuperada con éxito'
+		});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
 	}
-	const filter = { Usuario: userNameOld };
-	const opts = { new: true };
-	let modifyUser = await User.UsuariosAppMovil.findOneAndUpdate(filter, update, opts);
-	//modifyUser = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
-	res.status(200).json({
-		result: 'Se ha modificado la información con exito'
-	});
+}
+
+exports.changePassword = async(req,res) => {
+	const {Usuario, Contra_Actual, Nueva_Contra1, Nueva_Contra2} = req.body;
+	try {
+		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
+		if(!existingUser) return res.status(400).json({message: "No existe un usuario asociado"});
+		
+		//Comparación contraseña actual
+		const checkActualPass = await bcrypt.compare(Contra_Actual, existingUser.Contraseña);
+		if(!checkActualPass) return res.status(400).json({message: "Las contraseña es incorrecta"});
+
+		//Se hace el hash de la segunda contraseña para compararlas compare(data, encrypted)
+		const hashedPassword2 = await bcrypt.hash(Nueva_Contra2, 12);
+		const checkPasswords = await bcrypt.compare(Nueva_Contra1,hashedPassword2);
+		if(!checkPasswords) return res.status(400).json({message: "Las contraseñas no coinciden"});
+		
+		var update = {};
+		update.Contraseña = hashedPassword2;
+		const filter = {Usuario: Usuario};
+		const opts = {new: true};
+		let modifyPassword = await User.UsuariosAppMovil.findOneAndUpdate(filter, update, opts);
+		res.status(200).json({
+			result: 'Se ha cambiado la contraseña con éxito'
+		});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
 }

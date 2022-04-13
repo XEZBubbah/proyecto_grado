@@ -5,6 +5,8 @@ const fetchAllUsers = require('../controllers/userMovil');
 const fetchUserInfo = require('../controllers/userMovil');
 const modifyUserInfo = require('../controllers/userMovil');
 const deleteUserAccount = require('../controllers/userMovil');
+const restorePassword = require('../controllers/userMovil');
+const changePassword = require('../controllers/userMovil');
 
 var router = express.Router();
 
@@ -14,5 +16,7 @@ router.post('/fetchAllUsers', fetchAllUsers.fetchAllUsers);
 router.post('/fetchUserInfo', fetchUserInfo.fetchUserInfo);
 router.post('/modifyUserInfo', modifyUserInfo.modifyUserInfo);
 router.post('/deleteUserAccount', deleteUserAccount.deleteUserAccount);
+router.post('/restorePassword', restorePassword.restorePassword);
+router.post('/changePassword', changePassword.changePassword);
 
 module.exports = router;
