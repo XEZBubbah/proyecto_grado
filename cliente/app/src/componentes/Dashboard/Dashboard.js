@@ -19,11 +19,12 @@ import Grid from '@mui/material/Grid';
 import Title from './Microcomponents/Title';
 import Clock from './DateItems/Clock';
 import Date from './DateItems/Date'
+import UsersTable from './Microcomponents/RecentUsers';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import  { mainListItems, secondaryListItems } from './Microcomponents/DashList';
+import { mainListItems, secondaryListItems } from './Microcomponents/DashList';
 
 const drawerWidth = 240;
 
@@ -79,6 +80,7 @@ function DashboardContent() {
     setOpen(!open);
 };
 
+
 const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
 const dispatch = useDispatch();
 const history = useNavigate();
@@ -86,9 +88,9 @@ const location = useLocation();
 
 useEffect(() => {
     const token = user?.token;
-    //JWT
     setUser(JSON.parse(localStorage.getItem('profile')));
 },[location])
+
 
 
 const logout= () => {
@@ -188,9 +190,6 @@ const logout= () => {
                       <Typography component="p" variant="h4"></Typography>
                       <Clock></Clock>
                       <Date></Date>
-                      <Typography color="text.secondary" sx={{ flex: 1 }}>
-                        Actualmente hay: usuarios.
-                      </Typography>
                     </Paper>
                   </Grid>
                   {/* Recent Deposits */}
@@ -213,7 +212,8 @@ const logout= () => {
                         display: 'flex', 
                         flexDirection: 'column'
                       }}
-                    >               
+                    >
+                      <UsersTable></UsersTable>        
                     </Paper>
                   </Grid>
                 </Grid>

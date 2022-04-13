@@ -48,7 +48,6 @@ exports.signup = async(req,res) => {
 }
 
 exports.fetchUserCuantity = async(req,res) => {
-	//Agregar imagen
 	try {
 		const allUsers = await UserMov.UsuariosAppMovil.find({});
 		console.log("Usuarios registrados en la APPMovil");
