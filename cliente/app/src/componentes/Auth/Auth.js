@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -27,20 +26,8 @@ const Auth = () => {
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(isSignup){
-            dispatch(signup(form,history))
-        }else{
             dispatch(signin(form,history))
-        }
-        
-    };
-    
-    const [isSignup, setIsSignup] = useState(false);
-    const switchMode = () => {
-        setForm(initialState);
-        setIsSignup((prevIsSignup) => !prevIsSignup);
-        setShowPassword(false);
-      };
+    }
 
     return(
         

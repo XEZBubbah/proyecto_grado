@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -78,26 +78,26 @@ function DashboardContent() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
-};
+  };
 
 
-const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
-const dispatch = useDispatch();
-const history = useNavigate();
-const location = useLocation();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const dispatch = useDispatch();
+  const history = useNavigate();
+  const location = useLocation();
 
-useEffect(() => {
+  useEffect(() => {
     const token = user?.token;
     setUser(JSON.parse(localStorage.getItem('profile')));
-},[location])
+  },[location])
 
 
 
-const logout= () => {
-  dispatch({type: 'LOGOUT'})
-  history('/')
-  setUser(null);
-}
+  const logout= () => {
+    dispatch({type: 'LOGOUT'})
+    history('/')
+    setUser(null);
+  }
 
 
   return (

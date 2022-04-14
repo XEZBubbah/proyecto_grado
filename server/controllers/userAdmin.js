@@ -77,7 +77,7 @@ exports.fetchAllUsers = async(req,res) => {
             //allUsers[key].Contraseña = null
         });
 
-		res.status(200).json({result: allUsers});
+		res.status(200).json(allUsers);
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
