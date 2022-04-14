@@ -11,8 +11,9 @@ const cors = require("cors");
 const userAdminRoutes = require("./routes/userAdmin");
 const userMovilRoutes = require("./routes/userMovil");
 const groupMovilRoutes = require("./routes/groupMovil");
-const reportAdminRoutes = require("./routes/reporteAdmin");
+const chatMovilRoutes = require("./routes/chatMovil");
 const reportMovilRoutes = require("./routes/reportesMovil");
+const reportAdminRoutes = require("./routes/reporteAdmin");
 const config = require("./cors.js");
 
 const app = express();
@@ -25,7 +26,7 @@ app.use('/reportA', reportAdminRoutes);
 app.use('/reportM', reportMovilRoutes);
 app.use('/userM', userMovilRoutes);
 app.use('/groupM', groupMovilRoutes);
-
+app.use('/chatM', chatMovilRoutes);
 
 //Conexión base de datos mongoDB
 const BD = 'ciclorrutaDB';
