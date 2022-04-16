@@ -104,9 +104,18 @@ exports.getGroup = async(req,res) => {
         console.log("Grupo existente");
         console.log(existingGroup);
         const visibility = existingGroup.Visibilidad;
-        if(visibility == 'Privado' && Contraseña_Grupo.length == 0) {
-            return res.status(400).json({ message: "No puede acceder a un grupo privado sin digitar la contraseña"});
-        }else{
+        if(visibility == 'Publico') {
+            res.status(200).json({
+                result: {
+                    Nombre_Grupo: existingGroup.Nombre_Grupo,
+                    Descripcion: existingGroup.Descripcion,
+                    Visibilidad: existingGroup.Visibilidad,
+                    UAppMov_Usuario: existingGroup.UAppMov_Usuario
+                }
+            });
+        }else if(visibility == 'Privado' && Contraseña_Grupo.length == 0) {
+            return res.status(400).json({message: "No puede acceder a un grupo privado sin digitar la contraseña"});
+        }else {
             const isPasswordCorrect = await bcrypt.compare(Contraseña_Grupo, existingGroup.Contraseña_Grupo);
             if(!isPasswordCorrect) return res.status(404).json({ message:"La contraseña no es correcta"});
 
@@ -118,6 +127,38 @@ exports.getGroup = async(req,res) => {
                     UAppMov_Usuario: existingGroup.UAppMov_Usuario
                 }
             });
+        }
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
+
+exports.deleteUserGroup = async(req, res) => {
+    const {Nombre_Grupo, Contraseña_Grupo, Usuario} = req.body;
+
+    try {
+        const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
+        if(!user) return res.status(400).json({ message: "No se encuentra un usuario relacionado"});
+        const user_Id = user.id;
+        console.log("Usuario Grupo");
+        console.log(user);
+
+		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: user_Id});
+        if(!existingGroup) return res.status(400).json({ message: "No existe un grupo relacionado a este nombre o usuario"});
+        console.log("Grupo existente");
+        console.log(existingGroup);
+        const visibility = existingGroup.Visibilidad;
+        if(visibility == 'Publico') {
+            const deletedGroup = await Group.Grupos.deleteOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: user_Id});
+            res.status(200).json({DeletedGroups: deletedGroup.deletedCount, result: existingGroup});
+        }else if(visibility == 'Privado' && Contraseña_Grupo.length == 0) {
+            return res.status(400).json({message: "No puede acceder a un grupo privado sin digitar la contraseña"});
+        }else {
+            const isPasswordCorrect = await bcrypt.compare(Contraseña_Grupo, existingGroup.Contraseña_Grupo);
+            if(!isPasswordCorrect) return res.status(404).json({ message:"La contraseña no es correcta"});
+            const deletedGroup = await Group.Grupos.deleteOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: user_Id});
+            res.status(200).json({DeletedGroups: deletedGroup.deletedCount, result: existingGroup});
         }
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
