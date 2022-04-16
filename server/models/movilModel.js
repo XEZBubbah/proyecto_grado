@@ -68,7 +68,7 @@ module.exports.Reportes = mongoose.model("Reportes",ReportesSchema);
 const chatGrupo = mongoose.Schema({
     Avatar: {type: Buffer, contentType: String},
     Mensaje: {type: String, required:true},
-    Fecha_Creacion: {type: Date, required:true},
+    Fecha_Creacion: {type: String, required:true},
     Grupos_Id: {type: SchemaTypes.ObjectId, required:true},
     Grupos_Nombre_Grupo: {type: String, required:true},
     UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},

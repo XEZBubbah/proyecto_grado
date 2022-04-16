@@ -15,10 +15,11 @@ exports.storeUserMessages = async(req, res) => {
         if(!existingGroup) return res.status(400).json({message: "El grupo no se encuentra asociado al usuario ingresado"});
         console.log(existingUser);
 
+        var fecha = new Date();
         const newChatRecord = await Chat.chatGrupo.create({
             //Avatar: '',
             Mensaje: text,
-            Fecha_Creacion: new Date(),
+            Fecha_Creacion: fecha.toLocaleString(),
             Grupos_Id: existingGroup.id,
             Grupos_Nombre_Grupo: existingGroup.Nombre_Grupo,
             UAppMov_Id: existingUser.id,
@@ -52,7 +53,8 @@ exports.fetchChatMessages = async(req, res) => {
             UAppMov_Id: {$in: userGroupIds},
             Grupos_Nombre_Grupo: groupName
         }).sort({Fecha_Creacion: 'desc'}).snapshot(true);
-        
+
+        console.log(chatMessages);
         res.status(200).json({result: chatMessages});
     } catch (error) {
         res.status(500).json({message: "Algo salió mal durante la petición"});
