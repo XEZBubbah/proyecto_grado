@@ -47,16 +47,25 @@ exports.createGroup = async(req,res) => {
 exports.fetchGroup = async(req,res) => {
     const { Usuario } = req.body;
 	try {
-        var groups = await Group.Grupos.find({UAppMov_Usuario: {$ne: Usuario}})
-        console.log("Grupos");
-        console.log(groups);
+        let groupsname = new Array();
+        var userGroups = await Group.Grupos.find({UAppMov_Usuario: Usuario});
+        for(var index in Object.keys(userGroups)) {
+            //Se almacenan los ids de los grupos donde se encuentra el usuario
+            groupsname.push(userGroups[index].Nombre_Grupo);
+        }
+
+        var filteredGroups = await Group.Grupos.find({
+            Nombre_Grupo : {$nin: groupsname}
+        });
+        console.log("\nGrupos");
+        console.log(filteredGroups);
         //Filtrar documentos quitando informacion de campos sin interes para esta funcion
-        Object.keys(groups).map(key => {
-            groups[key].Contraseña_Grupo = null
-            groups[key].UAppMov_Id = null
+        Object.keys(filteredGroups).map(key => {
+            filteredGroups[key].Contraseña_Grupo = null
+            filteredGroups[key].UAppMov_Id = null
         });
 
-        res.status(200).json({result: groups});
+        res.status(200).json({result: filteredGroups});
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
@@ -151,19 +160,19 @@ exports.deleteUserGroup = async(req, res) => {
         console.log(existingGroup);
 
         if(existingGroup.Permiso == 'I') return res.status(404).json({
-            message:"No posees los permisos para eliminar este grupo"
+            message: "No posees los permisos para eliminar este grupo"
         });
 
         const visibility = existingGroup.Visibilidad;
         if(visibility == 'Publico') {
-            const deletedGroup = await Group.Grupos.deleteOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: user_Id});
+            const deletedGroup = await Group.Grupos.deleteMany({Nombre_Grupo: Nombre_Grupo});
             res.status(200).json({DeletedGroups: deletedGroup.deletedCount, result: existingGroup});
         }else if(visibility == 'Privado' && Contraseña_Grupo.length == 0) {
             return res.status(400).json({message: "No puede acceder a un grupo privado sin digitar la contraseña"});
         }else {
             const isPasswordCorrect = await bcrypt.compare(Contraseña_Grupo, existingGroup.Contraseña_Grupo);
             if(!isPasswordCorrect) return res.status(404).json({ message:"La contraseña no es correcta"});
-            const deletedGroup = await Group.Grupos.deleteOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: user_Id});
+            const deletedGroup = await Group.Grupos.deleteMany({Nombre_Grupo: Nombre_Grupo});
             res.status(200).json({DeletedGroups: deletedGroup.deletedCount, result: existingGroup});
         }
 	} catch (error) {

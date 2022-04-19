@@ -134,6 +134,10 @@ exports.deleteUserAccount = async(req,res) => {
 }
 
 exports.modifyUserInfo = async(req, res) => {
+	//******************PENDIENTE
+	//Cuando se modifique un usuario, se debe actualizar ese usuario en
+	//Reportes, Chat, Grupos, Itinerarios
+	//***************************
 	const {email, userNameOld, userNameNew, phone} = req.body;
 	try {
 		const existingUserOld = await User.UsuariosAppMovil.findOne({Usuario: userNameOld});
