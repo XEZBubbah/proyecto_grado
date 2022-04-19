@@ -148,6 +148,11 @@ exports.deleteUserGroup = async(req, res) => {
         if(!existingGroup) return res.status(400).json({ message: "No existe un grupo relacionado a este nombre o usuario"});
         console.log("Grupo existente");
         console.log(existingGroup);
+
+        if(existingGroup.Permiso == 'I') return res.status(404).json({
+            message:"No posees los permisos para eliminar este grupo"
+        });
+
         const visibility = existingGroup.Visibilidad;
         if(visibility == 'Publico') {
             const deletedGroup = await Group.Grupos.deleteOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: user_Id});
