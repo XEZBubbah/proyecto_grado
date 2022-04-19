@@ -136,7 +136,7 @@ exports.getGroup = async(req,res) => {
 
 exports.deleteUserGroup = async(req, res) => {
     const {Nombre_Grupo, Contraseña_Grupo, Usuario} = req.body;
-
+    
     try {
         const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
         if(!user) return res.status(400).json({ message: "No se encuentra un usuario relacionado"});
@@ -165,3 +165,45 @@ exports.deleteUserGroup = async(req, res) => {
 		console.log(error);
 	}
 }
+
+exports.vinculateToGroup = async(req, res) => {
+    const {Nombre_Grupo, Contraseña_Grupo, Usuario} = req.body;
+    try {
+        const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
+        if(!user) return res.status(400).json({ message: "No se encuentra un usuario relacionado"});
+        console.log("Usuario a vincular Grupo");
+        console.log(user);
+        //Se busca la existencia de un grupo con el mismo nombre, sabiendo que el nombre del grupo es único
+		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo});
+        if(!existingGroup) return res.status(400).json({ message: `No existe un grupo con el nombre ${Nombre_Grupo}`});
+        console.log(existingGroup);
+
+        const existingVinculateUser = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Usuario: Usuario});
+        if(existingVinculateUser) return res.status(400).json({
+            message: `El usuario ya se encuentra vinculado al grupo ${Nombre_Grupo} asociado a este nombre`
+        });
+
+        const visibility = existingGroup.Visibilidad;
+        if(visibility == 'Privado' && Contraseña_Grupo.length == 0) {
+            return res.status(400).json({message: "No puede acceder a un grupo privado sin digitar la contraseña"});
+        }
+        if(visibility == 'Privado' && Contraseña_Grupo.length > 0) {
+            const isPasswordCorrect = await bcrypt.compare(Contraseña_Grupo, existingGroup.Contraseña_Grupo);
+            if(!isPasswordCorrect) return res.status(404).json({message:"La contraseña no es correcta"});
+        }
+        const vinculatedGroup = await Group.Grupos.create({
+            Nombre_Grupo: existingGroup.Nombre_Grupo,
+            Descripcion: existingGroup.Descripcion,
+            Visibilidad: existingGroup.Visibilidad,
+            Contraseña_Grupo: existingGroup.Contraseña_Grupo,
+            Permiso: "I",
+            UAppMov_Id: user.id,
+            UAppMov_Usuario: user.Usuario
+        });
+        res.status(200).json({result: vinculatedGroup});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
+
