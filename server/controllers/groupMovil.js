@@ -45,8 +45,9 @@ exports.createGroup = async(req,res) => {
 }
 
 exports.fetchGroup = async(req,res) => {
+    const { Usuario } = req.body;
 	try {
-        var groups = await Group.Grupos.find({});
+        var groups = await Group.Grupos.find({UAppMov_Usuario: {$ne: Usuario}})
         console.log("Grupos");
         console.log(groups);
         //Filtrar documentos quitando informacion de campos sin interes para esta funcion
