@@ -58,6 +58,7 @@ exports.fetchUserInfo = async(req,res) => {
 		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
 		res.status(200).json({
 			result: {
+				_id: existingUser._id,
 				Nombre: existingUser.Nombre,
 				Apellido: existingUser.Apellido,
 				Correo: existingUser.Correo,
