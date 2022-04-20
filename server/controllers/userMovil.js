@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const User = require("./../models/movilModel");
 const Grupo = require("./../models/movilModel");
 const Itinerario = require("./../models/movilModel");
+const Chat = require("./../models/movilModel");
+const Reporte = require("./../models/movilModel");
+
 const secret = 'test';
 
 exports.signin = async(req,res) => {
@@ -134,15 +137,15 @@ exports.deleteUserAccount = async(req,res) => {
 }
 
 exports.modifyUserInfo = async(req, res) => {
-	//******************PENDIENTE
-	//Cuando se modifique un usuario, se debe actualizar ese usuario en
-	//Reportes, Chat, Grupos, Itinerarios
-	//***************************
 	const {email, userNameOld, userNameNew, phone} = req.body;
 	try {
 		const existingUserOld = await User.UsuariosAppMovil.findOne({Usuario: userNameOld});
 		if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
 		var update = {};
+		var updateGroup = {};
+		var updateItinerario = {};
+		var updateReporte = {};
+		var updateChat = {};
 
 		if(email === ""){
 			console.log('Email vacio');
@@ -163,10 +166,24 @@ exports.modifyUserInfo = async(req, res) => {
 		}else{
 			update.Celular = phone;
 		}
-		const filter = { Usuario: userNameOld };
-		const opts = { new: true };
+		
+		updateGroup.UAppMov_Usuario = userNameNew;
+		updateItinerario.UAppMov_Usuario = userNameNew;
+		updateReporte.UAppMov_Usuario = userNameNew;
+		updateChat.UAppMov_Usuario = userNameNew;
+
+		const filter = {Usuario: userNameOld };
+		const filterGroup = {UAppMov_Usuario: userNameOld};
+		const filterItinerario = {UAppMov_Usuario: userNameOld};
+		const filterReporte = {UAppMov_Usuario: userNameOld};
+		const filterChat = {UAppMov_Usuario: userNameOld};
+		const opts = {new: true};
+
 		let modifyUser = await User.UsuariosAppMovil.findOneAndUpdate(filter, update, opts);
-		//modifyUser = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
+		let modifyUserGroup = await Grupo.Grupos.updateMany(filterGroup, updateGroup, opts);
+		let modifyUserItinerario = await Itinerario.Itinerarios.updateMany(filterItinerario, updateItinerario, opts);
+		let modifyReporte = await Reporte.Reportes.updateMany(filterReporte, updateReporte, opts);
+		let modifyChat = await Chat.chatGrupo.updateMany(filterChat, updateChat, opts);
 		res.status(200).json({
 			result: 'Se ha modificado la información con exito'
 		});
