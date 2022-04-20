@@ -30,6 +30,7 @@ exports.signup = async(req,res) => {
 	const {email, password, confirmPassword, firstName, lastName, userName, birthDate, phone, avatar} = req.body;
 	try {
 		console.log("Request de la imagen");
+		console.log('photo: '+avatar);
 		console.log(req.file);
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
 		if(existingUser) return res.status(400).json({message: "El usuario ya existe"});
@@ -45,7 +46,7 @@ exports.signup = async(req,res) => {
 			Celular: phone,
 			Correo: email, 
 			Contraseña: hashedPassword,
-			Avatar: avatar //req.file.avatar.buffer
+			Avatar: avatar
 		});
 		res.status(200).json({result: result});
 	} catch (error) {
@@ -65,6 +66,7 @@ exports.fetchUserInfo = async(req,res) => {
 				Nombre: existingUser.Nombre,
 				Apellido: existingUser.Apellido,
 				Correo: existingUser.Correo,
+				Avatar: existingUser.Avatar
 			}
 		});
 	} catch (error) {
