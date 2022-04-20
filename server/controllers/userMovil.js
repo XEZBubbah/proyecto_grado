@@ -75,6 +75,24 @@ exports.fetchUserInfo = async(req,res) => {
 	}
 }
 
+exports.fetchUserAvatar = async(req,res) => {
+	const { Usuario } = req.body;
+	try {
+		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario });
+		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
+		const buffer = Buffer.from(existingUser.Avatar.data);
+		const base64String = buffer.toString('base64');
+		res.status(200).json({
+			result: {
+				Avatar: base64String
+			}
+		});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
+
 exports.fetchAllUsers = async(req,res) => {
 	try {
 		const allUsers = await User.UsuariosAppMovil.find({});
