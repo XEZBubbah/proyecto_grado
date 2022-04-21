@@ -66,7 +66,6 @@ exports.fetchUserInfo = async(req,res) => {
 				Nombre: existingUser.Nombre,
 				Apellido: existingUser.Apellido,
 				Correo: existingUser.Correo,
-				Avatar: existingUser.Avatar
 			}
 		});
 	} catch (error) {
@@ -80,14 +79,10 @@ exports.fetchUserAvatar = async(req,res) => {
 	try {
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario });
 		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
-		console.log("\n*********************************\n")
 		console.log(existingUser.Avatar);
-		console.log("\n*********************************\n")
-		const buffer = Buffer.from(existingUser.Avatar);
-		const base64String = buffer.toString('base64');
 		res.status(200).json({
 			result: {
-				Avatar: base64String
+				Avatar: existingUser.Avatar
 			}
 		});
 	} catch (error) {

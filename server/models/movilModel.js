@@ -12,7 +12,7 @@ const UsuariosAppMovilSchema = mongoose.Schema({
     Celular: {type: String, required:true},
     Correo: {type: String, required:true},
     Contraseña: {type: String, required:true},
-    Avatar: {type: Buffer, contentType: String}
+    Avatar: {type: String, contentType: String}
 });
 module.exports.UsuariosAppMovil = mongoose.model("UsuariosAppMovil",UsuariosAppMovilSchema);
 
