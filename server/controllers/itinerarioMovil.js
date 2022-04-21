@@ -15,8 +15,8 @@ exports.getUserItineraries = async(req, res) => {
         });
 
         const itineraries = await Itinerary.Itinerarios.find({
-            UAppMov_Id: existingUser.id,
-            Grupos_Id: existingGroup.id
+            UAppMov_Usuario: Usuario,
+            Grupos_Nombre_Grupo: Grupo
         });
 
 		res.status(200).json({result: itineraries});
@@ -40,10 +40,9 @@ exports.getUserItinerary = async(req, res) => {
 
         const userItinerary = await Itinerary.Itinerarios.findOne({
             Nombre_Itinerario: Itinerario,
-            UAppMov_Id: existingUser.id,
-            Grupos_Id: existingGroup.id
+            UAppMov_Usuario: Usuario,
+            Grupos_Nombre_Grupo: Grupo
         });
-
 		res.status(200).json({result: userItinerary});
 	} catch (error) {
 		console.log(error);
@@ -51,23 +50,69 @@ exports.getUserItinerary = async(req, res) => {
 	}
 }
 
+exports.vinculateToItinerary = async(req, res) => {
+    const {Usuario, Grupo, Itinerario} = req.body;
+
+    try {
+        console.log(Usuario, Grupo, Itinerario);
+        const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
+        if(!user) return res.status(400).json({message: "No se encuentra un usuario relacionado en el sistema"});
+        console.log("Usuario a vincular Itinerario");
+
+        //Se verifica que el usuario este vinculado al grupo donde se encuentra el itinerario
+        const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Grupo, UAppMov_Usuario: Usuario});
+        if(!existingGroup) return res.status(400).json({
+            message: `No existe el grupo con el nombre ${Grupo} o el usuario ${Usuario} no se encuentra vinculado`
+        });
+
+        //Se verifica que el usuario no este vinculado al itinerario
+        const existingVinculateUser = await Itinerary.Itinerarios.findOne({
+            Nombre_Itinerario: Itinerario,
+            UAppMov_Usuario: Usuario,
+            Grupos_Nombre_Grupo: Grupo
+        });
+        if(existingVinculateUser) return res.status(400).json({
+            message: `El usuario ya se encuentra vinculado al itinerario ${Itinerario}`
+        });
+
+        const existingItinerary = await Itinerary.Itinerarios.findOne({
+            Nombre_Itinerario: Itinerario,
+            Grupos_Nombre_Grupo: Grupo
+        });
+        if(!existingItinerary) return res.status(400).json({
+            message: `No existe el itinerario ${Itinerario} en el grupo ${Grupo}`
+        });
+
+        const vinculatedItinerary = await Itinerary.Itinerarios.create({
+            Nombre_Itinerario: Itinerario,
+            Hora_Salida: existingItinerary.Hora_Salida,
+            Hora_Llegada: existingItinerary.Hora_Llegada,
+            Punto_Partida: existingItinerary.Punto_Partida,
+            Punto_Llegada: existingItinerary.Punto_Llegada,
+            Descripcion: existingItinerary.Descripcion,
+            Permiso: 'I',
+            UAppMov_Id: user.id,
+            UAppMov_Usuario: Usuario,
+            Grupos_Id: existingGroup.id,
+            Grupos_Nombre_Grupo: Grupo
+        });
+        res.status(200).json({result: vinculatedItinerary});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
+
 exports.createItinerary = async(req, res) => {
-    const { 
-        Nombre_Itinerario, Hora_Salida, Hora_Llegada, Punto_Partida, Punto_Llegada, 
-        Descripcion, Usuario, Nombre_Grupo
-    } = req.body;
+    const { Nombre_Itinerario, Hora_Salida, Hora_Llegada, Punto_Partida, 
+        Punto_Llegada, Descripcion, Usuario, Nombre_Grupo} = req.body;
 
     try{
-        console.log("\n");
-        console.log(
-            Nombre_Itinerario, Hora_Salida, Hora_Llegada, Punto_Partida, 
-            Punto_Llegada, Descripcion, Usuario, Nombre_Grupo
-        );
-        console.log("\n");
+        console.log(Nombre_Itinerario, Hora_Salida, Hora_Llegada, Punto_Partida, Punto_Llegada, Descripcion, Usuario, Nombre_Grupo);
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 		
-        const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: existingUser.id});
+        const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Usuario: Usuario});
         if(!existingGroup) return res.status(400).json({
             message: "No existe un grupo relacionado a este nombre o usuario"
         });
@@ -84,6 +129,7 @@ exports.createItinerary = async(req, res) => {
             Punto_Partida: Punto_Partida,
             Punto_Llegada: Punto_Llegada,
             Descripcion: Descripcion,
+            Permiso: 'A',
             UAppMov_Id: existingUser.id,
             UAppMov_Usuario: Usuario,
             Grupos_Id: existingGroup.id,
@@ -97,7 +143,57 @@ exports.createItinerary = async(req, res) => {
 }
 
 exports.editItinerary = async(req, res) => {
-    
+    const { 
+        Nombre_ItinerarioNew, Nombre_ItinerarioOld, Hora_Salida, Hora_Llegada, 
+        Punto_Partida, Punto_Llegada, Descripcion, Usuario, Nombre_Grupo
+    } = req.body;
+
+    try{
+        console.log(
+            Nombre_ItinerarioNew, Nombre_ItinerarioOld, Hora_Salida, Hora_Llegada, Punto_Partida, 
+            Punto_Llegada, Descripcion, Usuario, Nombre_Grupo
+        );
+		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
+		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
+		
+        const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Usuario: Usuario});
+        if(!existingGroup) return res.status(400).json({
+            message: "No existe un grupo relacionado a este nombre o usuario"
+        });
+        
+        const existingItinerary = await Itinerary.Itinerarios.findOne({Nombre_Itinerario: Nombre_ItinerarioNew});
+        if(existingItinerary) return res.status(400).json({
+            message: `Ya existe un itinerario con el nombre ${Nombre_ItinerarioNew}`
+        });
+
+        const existingItineraryPermiso = await Itinerary.Itinerarios.findOne({
+            Nombre_Itinerario: Nombre_ItinerarioOld,
+            UAppMov_Usuario: Usuario
+        });
+        if(!existingItineraryPermiso) return res.status(400).json({
+            message: `No existe un itinerario con el nombre ${Nombre_ItinerarioOld} asociado al grupo ${Nombre_Grupo}`
+        });
+        if(existingItineraryPermiso.Permiso == 'I') return res.status(400).json({
+            message: "No posees los permisos para editar este itinerario"
+        });
+
+        var update = {
+            Nombre_Itinerario: Nombre_ItinerarioNew,
+            Hora_Salida: Hora_Salida,
+            Hora_Llegada: Hora_Llegada,
+            Punto_Partida: Punto_Partida,
+            Punto_Llegada: Punto_Llegada,
+            Descripcion: Descripcion
+        }
+        const filter = {Nombre_Itinerario: Nombre_ItinerarioOld}
+        const opts = {new: true};
+
+        const updatedItinerary = await Itinerary.Itinerarios.updateMany(filter,update,opts);
+        res.status(200).json({result: 'Se ha modificado la información con exito'});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Algo salió mal durante la petición"});
+    }
 }
 
 exports.deleteItinerary = async(req, res) => {
@@ -107,24 +203,26 @@ exports.deleteItinerary = async(req, res) => {
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 		
-        const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Grupo, UAppMov_Id: existingUser.id});
+        const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Grupo, UAppMov_Usuario: Usuario});
         if(!existingGroup) return res.status(400).json({
             message: "No existe un grupo relacionado a este nombre o usuario"
         });
 
         const existingItinerary = await Itinerary.Itinerarios.findOne({
             Nombre_Itinerario: Itinerario,
-            UAppMov_Id: existingUser.id,
-            Grupos_Id: existingGroup.id
+            UAppMov_Usuario: Usuario,
+            Grupos_Nombre_Grupo: Grupo
         });
         if(!existingItinerary) return res.status(400).json({
             message: `No existe un itinerario con el nombre ${Itinerario} asociado al usuario ${Usuario} y al grupo ${Grupo}`
         });
+        if(existingItinerary.Permiso == 'I') return res.status(400).json({
+            message: "No posees los permisos para eliminar este itinerario"
+        });
 
-        const deletedItinerary = await Itinerary.Itinerarios.deleteOne({
-            Nombre_Itinerario: Itinerario,
-            UAppMov_Id: existingUser.id,
-            Grupos_Id: existingGroup.id
+        const deletedItinerary = await Itinerary.Itinerarios.deleteMany({
+            Nombre_Itinerario: Itinerario, 
+            Grupos_Nombre_Grupo: Grupo
         });
 
 		res.status(200).json({

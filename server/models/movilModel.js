@@ -17,6 +17,7 @@ const UsuariosAppMovilSchema = mongoose.Schema({
 module.exports.UsuariosAppMovil = mongoose.model("UsuariosAppMovil",UsuariosAppMovilSchema);
 
 //Itinerarios
+//Permiso: Admin => A, Invitado => I
 const ItinerariosSchema = mongoose.Schema({
     Nombre_Itinerario: {type: String, required:true},
     Hora_Salida: {type: String, required:true},
@@ -24,6 +25,7 @@ const ItinerariosSchema = mongoose.Schema({
     Punto_Partida: {type: String, required:true},
     Punto_Llegada: {type: String, required:true},
     Descripcion: {type: String},
+    Permiso: {type: String, required:true},
     UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
     UAppMov_Usuario: {type: String, required:true},
     Grupos_Id: {type: SchemaTypes.ObjectId, required:true},
@@ -38,7 +40,7 @@ const GruposSchema = mongoose.Schema({
     Descripcion: {type: String},
     Visibilidad: {type: String, required:true},
     Contraseña_Grupo: {type: String, required:false},
-    Permiso: {type: String, required:false},
+    Permiso: {type: String, required:true},
     UAppMov_Id: {type: SchemaTypes.ObjectId, required:true},
     UAppMov_Usuario: {type: String, required:true}
 });

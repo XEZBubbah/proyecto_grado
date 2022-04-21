@@ -81,7 +81,7 @@ exports.fetchUserGroup = async(req,res) => {
         console.log("Usuario Grupo");
         console.log(user);
 
-		var existingGroups = await Group.Grupos.find({UAppMov_Id: user_Id});
+		var existingGroups = await Group.Grupos.find({UAppMov_Usuario: Usuario});
         console.log("Grupos existentes");
         console.log(existingGroups);
 
@@ -109,7 +109,7 @@ exports.getGroup = async(req,res) => {
         console.log("Usuario Grupo");
         console.log(user);
 
-		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: user_Id});
+		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Usuario: Usuario});
         if(!existingGroup) return res.status(400).json({ message: "No existe un grupo relacionado a este nombre o usuario"});
         console.log("Grupo existente");
         console.log(existingGroup);
@@ -154,14 +154,12 @@ exports.deleteUserGroup = async(req, res) => {
         console.log("Usuario Grupo");
         console.log(user);
 
-		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Id: user_Id});
+		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Usuario: Usuario});
         if(!existingGroup) return res.status(400).json({ message: "No existe un grupo relacionado a este nombre o usuario"});
         console.log("Grupo existente");
         console.log(existingGroup);
 
-        if(existingGroup.Permiso == 'I') return res.status(404).json({
-            message: "No posees los permisos para eliminar este grupo"
-        });
+        if(existingGroup.Permiso == 'I') return res.status(404).json({message: "No posees los permisos para eliminar este grupo"});
 
         const visibility = existingGroup.Visibilidad;
         if(visibility == 'Publico') {
@@ -171,7 +169,7 @@ exports.deleteUserGroup = async(req, res) => {
             return res.status(400).json({message: "No puede acceder a un grupo privado sin digitar la contraseña"});
         }else {
             const isPasswordCorrect = await bcrypt.compare(Contraseña_Grupo, existingGroup.Contraseña_Grupo);
-            if(!isPasswordCorrect) return res.status(404).json({ message:"La contraseña no es correcta"});
+            if(!isPasswordCorrect) return res.status(404).json({message:"La contraseña no es correcta"});
             const deletedGroup = await Group.Grupos.deleteMany({Nombre_Grupo: Nombre_Grupo});
             res.status(200).json({DeletedGroups: deletedGroup.deletedCount, result: existingGroup});
         }

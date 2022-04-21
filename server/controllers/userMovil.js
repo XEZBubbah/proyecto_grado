@@ -202,9 +202,7 @@ exports.modifyUserInfo = async(req, res) => {
 		let modifyUserItinerario = await Itinerario.Itinerarios.updateMany(filterItinerario, updateItinerario, opts);
 		let modifyReporte = await Reporte.Reportes.updateMany(filterReporte, updateReporte, opts);
 		let modifyChat = await Chat.chatGrupo.updateMany(filterChat, updateChat, opts);
-		res.status(200).json({
-			result: 'Se ha modificado la información con exito'
-		});
+		res.status(200).json({result: 'Se ha modificado la información con exito'});
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
