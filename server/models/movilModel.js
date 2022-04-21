@@ -18,6 +18,7 @@ module.exports.UsuariosAppMovil = mongoose.model("UsuariosAppMovil",UsuariosAppM
 
 //Itinerarios
 const ItinerariosSchema = mongoose.Schema({
+    Nombre_Itinerario: {type: String, required:true},
     Hora_Salida: {type: String, required:true},
     Hora_Llegada: {type: String},
     Punto_Partida: {type: String, required:true},

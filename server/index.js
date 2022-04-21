@@ -11,6 +11,7 @@ const cors = require("cors");
 const userAdminRoutes = require("./routes/userAdmin");
 const userMovilRoutes = require("./routes/userMovil");
 const groupMovilRoutes = require("./routes/groupMovil");
+const itineraryMovilRoutes = require("./routes/itinerarioMovil");
 const chatMovilRoutes = require("./routes/chatMovil");
 const reportMovilRoutes = require("./routes/reportesMovil");
 const reportAdminRoutes = require("./routes/reporteAdmin");
@@ -26,6 +27,7 @@ app.use('/reportA', reportAdminRoutes);
 app.use('/reportM', reportMovilRoutes);
 app.use('/userM', userMovilRoutes);
 app.use('/groupM', groupMovilRoutes);
+app.use('/itineraryM', itineraryMovilRoutes);
 app.use('/chatM', chatMovilRoutes);
 
 //Conexión base de datos mongoDB
