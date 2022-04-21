@@ -52,13 +52,7 @@ exports.fetchUserCuantity = async(req,res) => {
 		const allUsers = await UserMov.UsuariosAppMovil.find({});
 		console.log("Usuarios registrados en la APPMovil");
 		console.log(allUsers);
-		//Filtrar documentos quitando informacion de campos sin interes para esta funcion
-		Object.keys(allUsers).map(key => {
-            allUsers[key]._id = null
-            //allUsers[key].Contraseña = null
-        });
-
-		res.status(200).json({result: allUsers.length});
+		res.status(200).json(allUsers.length);
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
@@ -71,12 +65,6 @@ exports.fetchAllUsers = async(req,res) => {
 		const allUsers = await UserMov.UsuariosAppMovil.find({});
 		console.log("Usuarios registrados en la APPMovil");
 		console.log(allUsers);
-		//Filtrar documentos quitando informacion de campos sin interes para esta funcion
-		Object.keys(allUsers).map(key => {
-            allUsers[key]._id = null
-            //allUsers[key].Contraseña = null
-        });
-
 		res.status(200).json(allUsers);
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
@@ -107,6 +95,7 @@ exports.fetchUserInfoMovil = async(req,res) => {
 	const { Usuario } = req.body;
 	try {
 		const existingUser = await UserMov.UsuariosAppMovil.findOne({Usuario: Usuario });
+		console.log(Usuario);
 		if(!existingUser) return res.status(400).json({ message: "No existe el usuario"});
 		res.status(200).json({
 			result: {

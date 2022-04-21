@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import Home from "./componentes/Home/Home";
 import Auth from "./componentes/Auth/Auth";
 import Dashboard from "./componentes/Dashboard/Dashboard";
+import Users from "./componentes/Users/Users";
+import UserDetails from "./componentes/User/UserDetails";
 
 const App = () => {
     const user = JSON.parse(localStorage.getItem('profile'));
@@ -14,8 +16,10 @@ const App = () => {
                 <Route path="/home" exact element={<Home/>}/>
                 <Route path="/dashboard" exact element={<Dashboard/>}/>
                 <Route path="/signin" exact element={user? <Navigate to="/home"/> : <Auth/>}/>
+                <Route path="/users" exact element={<Users/>}/>
+                <Route path="/users/:username" component={<UserDetails/>}/>
             </Routes>
-        </div>
+        </div>        
     </BrowserRouter>
     );
 

@@ -16,16 +16,12 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Title from './Microcomponents/Title';
-import Clock from './DateItems/Clock';
-import Date from './DateItems/Date'
-import UsersTable from './Microcomponents/RecentUsers';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems} from "../DashList/DashList";
-import { fetchUserCuantity } from '../../api';
+import UsersTable from "./UsersTable";
 
 const drawerWidth = 240;
 
@@ -75,35 +71,28 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
+const Users = () => {
+
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
-  const [usuariosTotal, setUsuariosTotal] = useState(0);
   const dispatch = useDispatch();
   const history = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const token = user?.token;
-    fetchUserCuantity().then((response) =>{
-      setUsuariosTotal(response.data);
-    })
     setUser(JSON.parse(localStorage.getItem('profile')));
   },[location])
-
-
 
   const logout= () => {
     dispatch({type: 'LOGOUT'})
     history('/')
     setUser(null);
   }
-
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -179,59 +168,29 @@ function DashboardContent() {
               }}
           >
             <Toolbar />
-              <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Grid container spacing={3}>
-                  {/* Bienvenida */}
-                  <Grid item xs={12} md={4} lg={3}>
+
+
+              <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+                <Grid>
                     <Paper
                       sx={{
                         p: 2,
                         display: 'flex',
                         flexDirection: 'column',
-                        height: 240,
-                    }}
-                    >
-                      <Title>Bienvenido/a {user?.result.Nombre}</Title>
-                      <Typography component="p" variant="h6">
-                        Hay un total de {usuariosTotal} usuarios
-                      </Typography>
-                      <Clock></Clock>
-                      <Date></Date>
-                    </Paper>
-                  </Grid>
-                  {/*  Reportes */}
-                  <Grid item xs={12} md={8} lg={9}>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        height: 240,
-                      }}
-                    >
-                    </Paper>
-                  </Grid>
-                  {/* Usuarios recientes*/}
-                  <Grid item xs={12}>
-                    <Paper 
-                      sx={{ 
-                        p: 2,
                         height: '100%',
-                        flexDirection: 'column'
                       }}
                     >
-                      <UsersTable>
-                      </UsersTable>        
+                    <UsersTable>
+
+                    </UsersTable>
                     </Paper>
-                  </Grid>
                 </Grid>
               </Container>
             </Box>
       </Box>
     </ThemeProvider>
-  );
+
+  )
 }
 
-export default function Dashboard() {
-  return <DashboardContent />;
-}
+export default Users

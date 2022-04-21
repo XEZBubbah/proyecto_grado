@@ -8,7 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles';
 import Input from './input';
-import { signin, signup } from '../../actions/auth';
+import { signin } from '../../actions/auth';
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: ''};
 

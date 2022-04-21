@@ -1,11 +1,10 @@
 import React, { useEffect, useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
 import { fetchAllUsers } from '../../../api';
+import { Box } from '@mui/system';
 
 // Generate Order Data
 
@@ -14,42 +13,49 @@ import { fetchAllUsers } from '../../../api';
 function RecentUsers() {
 
   
-  const [usuarios, setUsuarios] = useState(0);
+  const [usuarios, setUsuarios] = useState([]);
 
   useEffect(() => {
-    fetchAllUsers().then((response) => {
+    fetchAllUsers().then((response) =>{
       setUsuarios(response.data);
     })
-  }, []);
+  },[]);
 
   const columns = [
-    { field: "_id", headerName: "id", width: 150 },
-    { field: "Nombre", headerName: "Nombre", width: 150 },
-    { field: "Apellido", headerName: "Apellido", width: 150 },
-    { field: "Usuario", headerName: "Usuario", width: 150 },
-    { field: "Fecha_Nacimiento", headerName: "Fecha de Nacimiento", width: 150 },
-    { field: "Correo", headerName: "Correo", width: 150 }
+    { field: "_id", headerName: "id", headerAlign: 'center', width: 150 },
+    { field: "Nombre", headerName: "Nombres", headerAlign: 'center', width: 150 },
+    { field: "Apellido", headerName: "Apellidos", headerAlign: 'center', width: 150 },
+    { field: "Usuario", headerName: "Usuario", headerAlign: 'center', width: 150 },
+    { field: "Fecha_Nacimiento", headerName: "Fecha de Nacimiento", headerAlign: 'center', width: 180 },
+    { field: "Correo", headerName: "Correo", headerAlign: 'center', width: 150 }
   ];
 
   return (
-    <Grid>
+    <Box sx={{height: 300}}>
       <Title>Nuevos Usuarios</Title>
       <DataGrid 
+        initialState={{
+            sorting: {
+            sortModel: [{ field: '_id', sort: 'desc' }],
+          },
+        }}
+        columns={columns}
         rows={usuarios}
-        pageSize={15}
+        pageSize={5}
+        rowsPerPageOptions={[3]}
         getRowId={(row) => row._id}
-        columns={columns}>
+        sx={{height:'80%'}}
+      >
       </DataGrid>
       <Typography
-        component={Link} to="/home" 
+        component={Link} to="/Users" 
         variant="subtitle1"
         color="primary"
         noWrap
-        sx={{ flexGrow: 1, mt:1}} 
       >
         Todos los usuarios
       </Typography>
-    </Grid>
+    </Box>
   );
 }
 
