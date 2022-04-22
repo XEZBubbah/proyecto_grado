@@ -72,6 +72,15 @@ exports.fetchAllUsers = async(req,res) => {
 	}
 }
 
+exports.getUsers = async(req,res) => {
+	try{
+		const allUsers = await UserMov.UsuariosAppMovil.find({});
+		res.json({data: allUsers});
+	}catch(error){
+		res.status(404).json({ message: error.message });
+	}
+}
+
 exports.fetchUserInfoAdmin = async(req,res) => {
 	const { Correo } = req.body;
 	try {
@@ -86,6 +95,17 @@ exports.fetchUserInfoAdmin = async(req,res) => {
 			//Falta agregar Foto
 		});
 	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
+
+exports.getUserMovil = async(req,res) =>{
+	const { id } =req.params;
+	try{
+		const user = await UserMov.UsuariosAppMovil.findById(id);
+		res.status(200).json(user);
+	}catch(error){
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
 	}

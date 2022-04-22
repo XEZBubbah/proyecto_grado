@@ -1,10 +1,12 @@
 import React, { useEffect, useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Typography from '@mui/material/Typography';
+import { CircularProgress } from '@mui/material';
 import Title from './Title';
-import { fetchAllUsers } from '../../../api';
 import { Box } from '@mui/system';
+import { getUsers } from '../../../actions/users';
 
 // Generate Order Data
 
@@ -12,14 +14,11 @@ import { Box } from '@mui/system';
 
 function RecentUsers() {
 
-  
-  const [usuarios, setUsuarios] = useState([]);
-
-  useEffect(() => {
-    fetchAllUsers().then((response) =>{
-      setUsuarios(response.data);
-    })
-  },[]);
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(getUsers());
+  })
+  const users = useSelector((state)=>state.users.users);
 
   const columns = [
     { field: "_id", headerName: "id", headerAlign: 'center', width: 150 },
@@ -40,7 +39,7 @@ function RecentUsers() {
           },
         }}
         columns={columns}
-        rows={usuarios}
+        rows={users}
         pageSize={5}
         rowsPerPageOptions={[3]}
         getRowId={(row) => row._id}

@@ -1,25 +1,24 @@
 import React, { useEffect, useState} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Title from './Title';
-import { fetchAllUsers } from '../../api';
+import { getUsers } from '../../actions/users';
 
 const UsersTable = () => {
 
-    const [usuarios, setUsuarios] = useState([]);
     const dispatch = useDispatch();
     const history = useNavigate();
 
     useEffect(() => {
-      fetchAllUsers().then((response) =>{
-        setUsuarios(response.data);
-      })
+      dispatch(getUsers());
     },[]);
+
+    const allUsers = useSelector((state)=>state.users.users);
 
     const handleEdit = (e,row) => {
       e.preventDefault();
@@ -42,7 +41,7 @@ const UsersTable = () => {
                   color="inherit" 
                   sx={{ mr: 1, ml:3}}
                   onClick={(event,row) => {
-                    handleEdit(event,cellValues.row.Usuario);
+                    handleEdit(event,cellValues.row._id);
                   }}
                 >
                   <EditIcon/>
@@ -77,7 +76,7 @@ const UsersTable = () => {
           },
         }}
         columns={columns}
-        rows={usuarios}
+        rows={allUsers}
         pageSize={5}
         rowsPerPageOptions={[3]}
         getRowId={(row) => row._id}

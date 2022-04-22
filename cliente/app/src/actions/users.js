@@ -1,4 +1,4 @@
-import {FETCH_ALL, FETCH_USER, FETCH_CUANTITY} from '../constants/actionTypes';
+import {FETCH_ALL, FETCH_USER, FETCH_CUANTITY, START_LOADING, END_LOADING} from '../constants/actionTypes';
 import * as api from '../api/index.js';
 
 export const fetchUserCuantity = () => async(dispatch) =>{
@@ -12,17 +12,32 @@ export const fetchUserCuantity = () => async(dispatch) =>{
 
 export const fetchAllUsers = () => async (dispatch) => {
     try {
+      dispatch({type: START_LOADING});
       const { data } = await api.fetchAllUsers();
       dispatch({ type: FETCH_ALL, payload: data });
+      dispatch({ type: END_LOADING });
     } catch (error) {
       console.log(error.message);
     }
   };
   
-export const fetchUserInfoMovil = (username) => async (dispatch) => {
+export const getUsers = () => async(dispatch) => {
   try{
-    const { data } = await api.fetchUserInfoMovil(username);
+    dispatch({ type: START_LOADING });
+    const { data: { data } } = await api.getUsers();
+    dispatch({ type: FETCH_ALL, payload: { data } });
+    dispatch({ type: END_LOADING });
+  }catch(error){
+    console.log(error.message)
+  }
+}
+
+export const getUser = (id) => async (dispatch) => {
+  try{
+    console.log("sadasd"+id);
+    const { data } = await api.getUser(id);
     dispatch({type: FETCH_USER, payload: data})
+    dispatch({type: END_LOADING});
   }catch(error){
     console.log(error.message);
   }

@@ -17,7 +17,7 @@ const App = () => {
                 <Route path="/dashboard" exact element={<Dashboard/>}/>
                 <Route path="/signin" exact element={user? <Navigate to="/home"/> : <Auth/>}/>
                 <Route path="/users" exact element={<Users/>}/>
-                <Route path="/users/:username" component={<UserDetails/>}/>
+                <Route path="/users/:username" element={<UserDetails/>}/>
             </Routes>
         </div>        
     </BrowserRouter>

@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchUserInfoMovil } from '../../api';
+import { getUser } from '../../actions/users';
+import { Typography } from '@mui/material';
 
 const UserDetails = () => {
 
+  const { user, users, isLoading } = useSelector((state)=>state.users)
   const dispatch = useDispatch();
   const history = useNavigate();
-  const { username } = useParams();
-  const [usermobile, setUserMobile] = useState();
+  const  id  = useParams();
 
-  useEffect(() => {
-    console.log(username);
-    fetchUserInfoMovil(username).then((response) =>{
-      setUserMobile(response.data);
-    })
-  }, [username])
+  useEffect(()=>{
+    dispatch(getUser(id));
+  },[id])
+
 
   return (
-    <div>UserDetails</div>
+    <div>
+    <Typography></Typography>
+    </div>
   )
 }
 
