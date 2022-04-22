@@ -3,20 +3,29 @@ const User = require('./../models/movilModel');
 const Group = require('./../models/movilModel');
 
 exports.getGroupItineraries = async(req, res) => {
-    const {Grupo} = req.body;
+    const {Usuario, Grupo} = req.body;
     try {
-		console.log(Grupo);
+		console.log(Usuario, Grupo);
+        const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
+		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 
         const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Grupo});
-        if(!existingGroup) return res.status(400).json({
-            message: `No existe un grupo con el nombre ${Grupo}`
-        });
+        if(!existingGroup) return res.status(400).json({message: `No existe un grupo con el nombre ${Grupo}`});
 
-        const itineraries = await Itinerary.Itinerarios.find({
-            Grupos_Nombre_Grupo: Grupo
-        });
+        let itinerarynames = new Array();
+        var useritineraries = await Itinerary.Itinerarios.find({UAppMov_Usuario: Usuario});
+        for(var index in Object.keys(useritineraries)) {
+            //Se almacenan los nombres de los itinerarios donde se encuentra el usuario
+            itinerarynames.push(useritineraries[index].Nombre_Itinerario);
+        }
 
-		res.status(200).json({result: itineraries});
+        var filteredItineraries = await Itinerary.Itinerarios.find({
+            Nombre_Itinerario : {$nin: itinerarynames}
+        });
+        console.log("\nItinerarios");
+        console.log(filteredItineraries);
+
+        res.status(200).json({result: filteredItineraries});
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({message: "Algo salió mal durante la petición"});
