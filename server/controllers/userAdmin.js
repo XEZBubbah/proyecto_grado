@@ -75,7 +75,7 @@ exports.fetchAllUsers = async(req,res) => {
 exports.getUsers = async(req,res) => {
 	try{
 		const allUsers = await UserMov.UsuariosAppMovil.find({});
-		res.json({data: allUsers});
+		res.send({data: allUsers});
 	}catch(error){
 		res.status(404).json({ message: error.message });
 	}
