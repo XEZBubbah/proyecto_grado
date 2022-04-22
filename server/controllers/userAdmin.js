@@ -104,7 +104,7 @@ exports.getUserMovil = async(req,res) =>{
 	const { id } =req.params;
 	try{
 		const user = await UserMov.UsuariosAppMovil.findById(id);
-		res.status(200).json(user);
+		res.send({data: user});
 	}catch(error){
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
