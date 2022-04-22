@@ -2,6 +2,27 @@ const Itinerary = require('./../models/movilModel');
 const User = require('./../models/movilModel');
 const Group = require('./../models/movilModel');
 
+exports.getGroupItineraries = async(req, res) => {
+    const {Grupo} = req.body;
+    try {
+		console.log(Grupo);
+
+        const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Grupo});
+        if(!existingGroup) return res.status(400).json({
+            message: `No existe un grupo con el nombre ${Grupo}`
+        });
+
+        const itineraries = await Itinerary.Itinerarios.find({
+            Grupos_Nombre_Grupo: Grupo
+        });
+
+		res.status(200).json({result: itineraries});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+	}
+}
+
 exports.getUserItineraries = async(req, res) => {
     const {Usuario, Grupo} = req.body;
     try {
