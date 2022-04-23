@@ -185,6 +185,8 @@ exports.editItinerary = async(req, res) => {
             Nombre_ItinerarioNew, Nombre_ItinerarioOld, Hora_Salida, Hora_Llegada, Punto_Partida, 
             Punto_Llegada, Descripcion, Usuario, Nombre_Grupo
         );
+        var update = {};
+
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 		
@@ -209,14 +211,13 @@ exports.editItinerary = async(req, res) => {
             message: "No posees los permisos para editar este itinerario"
         });
 
-        var update = {
-            Nombre_Itinerario: Nombre_ItinerarioNew,
-            Hora_Salida: Hora_Salida,
-            Hora_Llegada: Hora_Llegada,
-            Punto_Partida: Punto_Partida,
-            Punto_Llegada: Punto_Llegada,
-            Descripcion: Descripcion
-        }
+        if(Nombre_ItinerarioNew === ""){console.log("Nombre de itinerario vacio");}else{update.Nombre_Itinerario = Nombre_ItinerarioNew;}
+        if(Hora_Salida === ""){console.log("Hora de salida vacia");}else{update.Hora_Salida = Hora_Salida;}
+        if(Hora_Llegada === ""){console.log("Hora de llegada vacia");}else{update.Hora_Llegada = Hora_Llegada;}
+        if(Punto_Partida === ""){console.log("Punto de partida vacio");}else{update.Punto_Partida = Punto_Partida;}
+        if(Punto_Llegada === ""){console.log("Punto de llegada vacio");}else{update.Punto_Llegada = Punto_Llegada;}
+        if(Descripcion === ""){console.log("Descripción vacia");}else{update.Descripcion = Descripcion;}
+
         const filter = {Nombre_Itinerario: Nombre_ItinerarioOld}
         const opts = {new: true};
 
