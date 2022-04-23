@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<head>
+    <title>Profile form</title>
+</head>
+<body>
+    <form method="POST" action="/userM/signupMov" enctype="multipart/form-data">
+        <div>
+            <label>Upload Profile Picture Testing</label>
+        </div>
+        <div>
+            <label>firstName</label>
+            <input type="text" name="firstName" required/>
+        </div>
+        <div>
+            <label>lastName</label>
+            <input type="text" name="lastName" required/>
+        </div>
+        <div>
+            <label>userName</label>
+            <input type="text" name="userName" required/>
+        </div>
+        <div>
+            <label>birthDate</label>
+            <input type="date" name="birthDate" required/>
+        </div>
+        <div>
+            <label>phone</label>
+            <input type="text" name="phone" required/>
+        </div>
+        <div>
+            <label>email</label>
+            <input type="email" name="email" required/>
+        </div>
+        <div>
+            <label>password</label>
+            <input type="password" name="password" required/>
+        </div>
+        <div>
+            <label>avatar</label>
+            <input type="file" name="avatar" required/>
+        </div>
+        <div>
+            <input type="submit" value="Upload" />
+        </div>
+    </form>
+</body>
+</html>

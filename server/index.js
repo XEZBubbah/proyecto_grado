@@ -19,6 +19,8 @@ const config = require("./cors.js");
 
 const app = express();
 
+app.use(express.static(__dirname + '/public'));
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.json({limit: '30mb', extended:true}));
 app.use(bodyParser.urlencoded({limit: '30mb', extended:true}));
 app.use(cors());

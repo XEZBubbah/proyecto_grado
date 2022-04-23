@@ -28,19 +28,52 @@ exports.signin = async(req,res) => {
 exports.signup = async(req,res) => {
 	const {email, password, confirmPassword, firstName, lastName} = req.body;
 	try {
+		var avatarMap = {filename: "", path: "", mimetype: ""};
+		console.log("\nRequest file de la imagen");
+		console.log(req.file);
+
 		const existingUser = await User.UsuariosAdmin.findOne({Correo: email });
 		if(existingUser) return res.status(400).json({ message: "El usuario ya existe"});
 		//if(password !== confirmPassword) return res.status(400).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
 		console.log(email, password, firstName);
+
+		if(req.file) {
+			avatarMap.filename = req.file.filename;
+			avatarMap.path = req.file.path;
+			avatarMap.mimetype = req.file.mimetype;
+		}
 		const result = await User.UsuariosAdmin.create({
 			Correo: email, 
 			Contraseña: hashedPassword, 
 			Nombre: firstName, 
-			Apellido: lastName
+			Apellido: lastName,
+			Avatar: avatarMap
 		});
 		const token = jwt.sign({email: result.email, id: result._id}, secret, {expiresIn: "1h"});
 		res.status(200).json({result, token});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
+
+exports.fetchAdminAvatar = async(req,res) => {
+	const { email } = req.params;
+	try {
+		const existingUser = await User.UsuariosAdmin.findOne({Correo: email });
+		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
+		console.log(existingUser.Avatar);
+		var filename = existingUser.Avatar.get("filename");
+		var options = {
+			root: './uploads',
+			dotfiles: 'deny',
+			headers: {
+			  'x-timestamp': Date.now(),
+			  'x-sent': true
+			}
+		}
+		res.sendFile(filename, options);
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
@@ -60,7 +93,6 @@ exports.fetchUserCuantity = async(req,res) => {
 }
 
 exports.fetchAllUsers = async(req,res) => {
-	//Agregar imagen
 	try {
 		const allUsers = await UserMov.UsuariosAppMovil.find({});
 		console.log("Usuarios registrados en la APPMovil");

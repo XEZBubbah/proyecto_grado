@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<head>
+    <title>Profile form</title>
+</head>
+<body>
+    <form method="POST" action="/userA/signup" enctype="multipart/form-data">
+        <div>
+            <label>Upload Profile Picture Admin Testing</label>
+        </div>
+        <div>
+            <label>email</label>
+            <input type="email" name="email" required/>
+        </div>
+        <div>
+            <label>password</label>
+            <input type="password" name="password" required/>
+        </div>
+        <div>
+            <label>confirmPassword</label>
+            <input type="password" name="confirmPassword" required/>
+        </div>
+        <div>
+            <label>firstName</label>
+            <input type="text" name="firstName" required/>
+        </div>
+        <div>
+            <label>lastName</label>
+            <input type="text" name="lastName" required/>
+        </div>
+        <div>
+            <label>avatar</label>
+            <input type="file" name="avatar" required/>
+        </div>
+        <div>
+            <input type="submit" value="Upload" />
+        </div>
+    </form>
+</body>
+</html>

@@ -29,15 +29,25 @@ exports.signin = async(req,res) => {
 exports.signup = async(req,res) => {
 	const {email, password, confirmPassword, firstName, lastName, userName, birthDate, phone, avatar} = req.body;
 	try {
-		console.log("Request de la imagen");
-		console.log('photo: '+avatar);
+		var avatarMap = {filename: "", path: "", mimetype: ""};
+
+		console.log("\nRequest file de la imagen");
 		console.log(req.file);
+		console.log("\nRequest body de la imagen");
+		console.log('photo: '+avatar);
+
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
 		if(existingUser) return res.status(400).json({message: "El usuario ya existe"});
 		//if(password !== confirmPassword) return res.status(200).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
 		console.log(email, password, firstName);
 		
+		if(req.file) {
+			avatarMap.filename = req.file.filename;
+			avatarMap.path = req.file.path;
+			avatarMap.mimetype = req.file.mimetype;
+		}
+
 		const result = await User.UsuariosAppMovil.create({
 			Nombre: firstName, 
 			Apellido: lastName,
@@ -46,7 +56,7 @@ exports.signup = async(req,res) => {
 			Celular: phone,
 			Correo: email, 
 			Contraseña: hashedPassword,
-			Avatar: avatar
+			Avatar: avatarMap
 		});
 		res.status(200).json({result: result});
 	} catch (error) {
@@ -75,16 +85,21 @@ exports.fetchUserInfo = async(req,res) => {
 }
 
 exports.fetchUserAvatar = async(req,res) => {
-	const { Usuario } = req.body;
+	const { Usuario } = req.params;
 	try {
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario });
 		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
 		console.log(existingUser.Avatar);
-		res.status(200).json({
-			result: {
-				Avatar: existingUser.Avatar
+		var filename = existingUser.Avatar.get("filename");
+		var options = {
+			root: './uploads',
+			dotfiles: 'deny',
+			headers: {
+			  'x-timestamp': Date.now(),
+			  'x-sent': true
 			}
-		});
+		}
+		res.sendFile(filename, options);
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
