@@ -20,12 +20,13 @@ import Title from './Microcomponents/Title';
 import Clock from './DateItems/Clock';
 import Date from './DateItems/Date'
 import UsersTable from './Microcomponents/RecentUsers';
+import RReports from './Microcomponents/ResumeReports';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems} from "../DashList/DashList";
 import { fetchUserCuantity } from '../../api';
+import MainList from "../DashList/MainList";
 
 const drawerWidth = 240;
 
@@ -160,11 +161,7 @@ function DashboardContent() {
               </IconButton>
             </Toolbar>
             <Divider/>
-              <List component="nav">
-                {mainListItems}
-                  <Divider sx={{ my: 1 }} />
-                {secondaryListItems}
-              </List>
+              <MainList/>
           </Drawer>
           <Box
             component="main"
@@ -209,6 +206,8 @@ function DashboardContent() {
                         height: 240,
                       }}
                     >
+                      <RReports>
+                      </RReports>
                     </Paper>
                   </Grid>
                   {/* Usuarios recientes*/}

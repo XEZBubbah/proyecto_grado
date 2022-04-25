@@ -83,8 +83,6 @@ exports.fetchAdminAvatar = async(req,res) => {
 exports.fetchUserCuantity = async(req,res) => {
 	try {
 		const allUsers = await UserMov.UsuariosAppMovil.find({});
-		console.log("Usuarios registrados en la APPMovil");
-		console.log(allUsers);
 		res.status(200).json(allUsers.length);
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});

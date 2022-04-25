@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getUser } from '../../actions/users';
-import { Typography } from '@mui/material';
+import { Typography, Paper, CircularProgress } from '@mui/material';
 
 const UserDetails = () => {
 
@@ -12,13 +12,20 @@ const UserDetails = () => {
   const  id  = useParams();
 
   useEffect(()=>{
-    dispatch(getUser(id));
+    dispatch(getUser(id.id));
   },[id])
-
-
+  
+  if (isLoading) {
+    return (
+      <Paper elevation={6}>
+        <CircularProgress size="7em" />
+      </Paper>
+    );
+  }
+  console.log(user);
   return (
     <div>
-    <Typography></Typography>
+    <Typography>asdasdsad</Typography>
     </div>
   )
 }

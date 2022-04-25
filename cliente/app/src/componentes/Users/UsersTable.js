@@ -67,7 +67,7 @@ const UsersTable = () => {
 
 
   return (
-    <Box sx={{height: 400}}>
+    <Box sx={{height: 550}}>
       <Title>Usuarios</Title>
       <DataGrid 
         initialState={{
@@ -77,7 +77,7 @@ const UsersTable = () => {
         }}
         columns={columns}
         rows={allUsers}
-        pageSize={5}
+        pageSize={7}
         rowsPerPageOptions={[3]}
         getRowId={(row) => row._id}
         sx={{height:'90%'}}

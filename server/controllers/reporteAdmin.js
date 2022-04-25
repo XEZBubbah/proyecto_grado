@@ -9,6 +9,33 @@ exports.fetchAllReports = async(req,res) => {
 	}
 }
 
+exports.getReportsNuevos = async(req,res) =>{
+	try{
+		const existingReport = await Reporte.Reportes.find({Estado:"N"});
+		res.status(200).json(existingReport.length);
+	}catch(error){
+		res.status(500).json({message:"Algo salió mal durante la petición"});
+	}
+}
+
+exports.getReportsProceso = async(req,res) =>{
+	try{
+		const existingReport = await Reporte.Reportes.find({Estado:"B"});
+		res.status(200).json(existingReport.length);
+	}catch(error){
+		res.status(500).json({message:"Algo salió mal durante la petición"});
+	}
+}
+
+exports.getReportsCompleto = async(req,res) => {
+	try{
+		const existingReport = await Reporte.Reportes.find({Estado:"F"});
+		res.status(200).json(existingReport.length);
+	}catch(error){
+		res.status(500).json({message:"Algo salió mal durante la petición"});
+	}
+}
+
 exports.fetchReport = async(req,res) => {
 	const {Report_Id} = req.body;
 	try {

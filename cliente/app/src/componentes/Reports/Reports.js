@@ -19,7 +19,6 @@ import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import UsersTable from "./UsersTable";
 import MainList from "../DashList/MainList";
 
 const drawerWidth = 240;
@@ -70,7 +69,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-const Users = () => {
+const Reports = () => {
 
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
@@ -92,101 +91,10 @@ const Users = () => {
     history('/')
     setUser(null);
   }
-
+  
   return (
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-          <AppBar position="absolute" open={open}>
-            <Toolbar
-              sx={{
-                pr: '24px', // keep right padding when drawer closed
-              }}
-            >
-              <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                onClick={toggleDrawer}
-                sx={{
-                  marginRight: '36px',
-                  ...(open && { display: 'none' }),
-                }}
-              >
-              <MenuIcon />
-              </IconButton>
-              <Typography
-                component="h1"
-                variant="h6"
-                color="inherit"
-                noWrap
-                sx={{ flexGrow: 1 }}
-              >
-                BikeApp Dashboard
-              </Typography>
-              <Avatar alt={user?.result.nombre} sx={{ mr: 3}} src={user?.result.imageUrl}>{user?.result.Nombre.charAt(0)}</Avatar>
-              <IconButton color="inherit" sx={{ mr: 3}} >
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <Button variant="contained" onClick={logout}>Cerrar Sesión</Button>
-            </Toolbar>
-          </AppBar>
-    
-          <Drawer variant="permanent" open={open}>
-            <Toolbar
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',                  
-                px: [1],
-              }}
-            >
-              <IconButton onClick={toggleDrawer}>                
-                <ChevronLeftIcon />
-              </IconButton>
-            </Toolbar>
-            <Divider/>
-              <MainList>
-              </MainList>
-          </Drawer>
-          <Box
-            component="main"
-            sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === 'light'
-                ? theme.palette.grey[100]                    
-                : theme.palette.grey[900],
-                flexGrow: 1,
-                height: '100vh',
-                overflow: 'auto',
-              }}
-          >
-            <Toolbar />
-
-
-              <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-                <Grid>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        height: '100%',
-                      }}
-                    >
-                    <UsersTable>
-
-                    </UsersTable>
-                    </Paper>
-                </Grid>
-              </Container>
-            </Box>
-      </Box>
-    </ThemeProvider>
-
+    <div>reports</div>
   )
 }
 
-export default Users
+export default Reports

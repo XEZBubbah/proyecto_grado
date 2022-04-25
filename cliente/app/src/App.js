@@ -4,7 +4,8 @@ import Home from "./componentes/Home/Home";
 import Auth from "./componentes/Auth/Auth";
 import Dashboard from "./componentes/Dashboard/Dashboard";
 import Users from "./componentes/Users/Users";
-import UserDetails from "./componentes/User/UserDetails";
+import UserDetails  from "./componentes/User/UserDetails";
+import Reports from "./componentes/Reports/Reports";
 
 const App = () => {
     const user = JSON.parse(localStorage.getItem('profile'));
@@ -17,7 +18,8 @@ const App = () => {
                 <Route path="/dashboard" exact element={<Dashboard/>}/>
                 <Route path="/signin" exact element={user? <Navigate to="/home"/> : <Auth/>}/>
                 <Route path="/users" exact element={<Users/>}/>
-                <Route path="/users/:username" element={<UserDetails/>}/>
+                <Route path="/users/:id" element={<UserDetails/>}/>
+                <Route path="/reports" exact element={<Reports/>}/>
             </Routes>
         </div>        
     </BrowserRouter>

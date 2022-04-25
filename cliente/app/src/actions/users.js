@@ -9,17 +9,6 @@ export const fetchUserCuantity = () => async(dispatch) =>{
         console.log(error);
     }
 }
-
-export const fetchAllUsers = () => async (dispatch) => {
-    try {
-      dispatch({type: START_LOADING});
-      const { data } = await api.fetchAllUsers();
-      dispatch({ type: FETCH_ALL, payload: data });
-      dispatch({ type: END_LOADING });
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
   
 export const getUsers = () => async(dispatch) => {
   try{
@@ -34,7 +23,7 @@ export const getUsers = () => async(dispatch) => {
 
 export const getUser = (id) => async (dispatch) => {
   try{
-    console.log("sadasd"+id);
+    dispatch({ type: START_LOADING });
     const { data } = await api.getUser(id);
     dispatch({type: FETCH_USER, payload: data})
     dispatch({type: END_LOADING});
