@@ -27,20 +27,20 @@ exports.signin = async(req,res) => {
 }
 
 exports.signup = async(req,res) => {
-	const {email, password, confirmPassword, firstName, lastName, userName, birthDate, phone, avatar} = req.body;
+	console.log(req.body);
+	console.log("\n");
+	const {email, password, firstName, lastName, userName, birthDate, phone} = req.body;
 	try {
+		console.log(email, password, firstName, lastName, userName, birthDate, phone);
 		var avatarMap = {filename: "", path: "", mimetype: ""};
 
 		console.log("\nRequest file de la imagen");
 		console.log(req.file);
-		console.log("\nRequest body de la imagen");
-		console.log('photo: '+avatar);
+		console.log("\n");
 
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
 		if(existingUser) return res.status(400).json({message: "El usuario ya existe"});
-		//if(password !== confirmPassword) return res.status(200).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
-		console.log(email, password, firstName);
 		
 		if(req.file) {
 			avatarMap.filename = req.file.filename;
@@ -143,8 +143,6 @@ exports.deleteUserAccount = async(req,res) => {
 		for(iter of indices_I) {
 			var id_Itinerario = itinerariosUser[iter]["_id"];
 			var itinerarioDeleted = await Itinerario.Itinerarios.findByIdAndDelete({_id: id_Itinerario});
-  			console.log(id_Itinerario);
-			console.log(itinerarioDeleted);
 		}
 
 		//Grupos asociados al usuario
@@ -156,8 +154,6 @@ exports.deleteUserAccount = async(req,res) => {
 		for(iter of indices_G) {
 			var id_Grupo = gruposUser[iter]["_id"];
 			var grupoDeleted = await Grupo.Grupos.findByIdAndDelete({_id: id_Grupo});
-  			console.log(id_Grupo);
-			console.log(grupoDeleted);
 		}
 
 		//Eliminacion del usuario
@@ -189,7 +185,7 @@ exports.modifyUserInfo = async(req, res) => {
 		}
 		if(userNameNew === ""){
 			console.log('Username vacio');
-		} else{
+		}else{
 			update.Usuario = userNameNew;
 			const existingUserNew = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
 			if(existingUserNew) return res.status(400).json({message: "Este nombre de usuario ya se encuentra en uso"});

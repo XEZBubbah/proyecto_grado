@@ -5,6 +5,7 @@ import cors from "cors";
 import userRoutes from './routes/user.js';
 import config from './cors.js';*/
 const express = require("express");
+const path = require('path')
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -20,7 +21,7 @@ const config = require("./cors.js");
 const app = express();
 
 app.use(express.static(__dirname + '/public'));
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 app.use(bodyParser.json({limit: '30mb', extended:true}));
 app.use(bodyParser.urlencoded({limit: '30mb', extended:true}));
 app.use(cors());
