@@ -15,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import Link from '@mui/material/Link';
 import MainList from "../DashList/MainList";
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -173,6 +174,11 @@ const Cartografia = () => {
                       }}
                     >
                         <Map></Map>
+                        <Paper align="center">                         
+                          <Link href="https://pastebin.com/raw/203B9ixP" variant="h6"underline="hover" sx={{m:1}}>
+                            {'Cartografía actual'}
+                          </Link>
+                        </Paper>
                     </Paper>
                 </Grid>
               </Container>
