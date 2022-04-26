@@ -25,6 +25,7 @@ export const getUser = (id) => async (dispatch) => {
   try{
     dispatch({ type: START_LOADING });
     const { data } = await api.getUser(id);
+    console.log(data);
     dispatch({type: FETCH_USER, payload: data})
     dispatch({type: END_LOADING});
   }catch(error){

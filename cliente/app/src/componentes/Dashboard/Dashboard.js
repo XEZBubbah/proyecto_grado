@@ -8,15 +8,13 @@ import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Title from './Microcomponents/Title';
+import Title from '../Title/Title';
 import Clock from './DateItems/Clock';
 import Date from './DateItems/Date'
 import UsersTable from './Microcomponents/RecentUsers';
@@ -24,7 +22,6 @@ import RReports from './Microcomponents/ResumeReports';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { fetchUserCuantity } from '../../api';
 import MainList from "../DashList/MainList";
 
@@ -138,11 +135,6 @@ function DashboardContent() {
                 BikeApp Dashboard
               </Typography>
               <Avatar alt={user?.result.nombre} sx={{ mr: 3}} src={user?.result.imageUrl}>{user?.result.Nombre.charAt(0)}</Avatar>
-              <IconButton color="inherit" sx={{ mr: 3}} >
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
               <Button variant="contained" onClick={logout}>Cerrar Sesión</Button>
             </Toolbar>
           </AppBar>

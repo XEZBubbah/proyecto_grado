@@ -10,7 +10,7 @@ const getReportsCompleto = require("../controllers/reporteAdmin");
 var router = express.Router();
 
 router.post('/fetchAllReports', fetchAllReports.fetchAllReports);
-router.post('/fetchReport', fetchReport.fetchReport);
+router.post('/:id', fetchReport.fetchReport);
 router.post('/editReport', editReport.editReport);
 router.post('/deleteReport', deleteReport.deleteReport);
 router.get('/getReportsNuevos', getReportsNuevos.getReportsNuevos);

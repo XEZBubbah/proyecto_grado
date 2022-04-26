@@ -3,7 +3,7 @@ const Reporte = require("../models/movilModel");
 exports.fetchAllReports = async(req,res) => {
 	try {
 		const existingReports = await Reporte.Reportes.find({});
-		res.status(200).json({result:existingReports});
+		res.status(200).json({data:existingReports});
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 	}
@@ -20,7 +20,7 @@ exports.getReportsNuevos = async(req,res) =>{
 
 exports.getReportsProceso = async(req,res) =>{
 	try{
-		const existingReport = await Reporte.Reportes.find({Estado:"B"});
+		const existingReport = await Reporte.Reportes.find({Estado:"P"});
 		res.status(200).json(existingReport.length);
 	}catch(error){
 		res.status(500).json({message:"Algo salió mal durante la petición"});
@@ -37,11 +37,10 @@ exports.getReportsCompleto = async(req,res) => {
 }
 
 exports.fetchReport = async(req,res) => {
-	const {Report_Id} = req.body;
+	const { id } = req.params;
 	try {
-        const existingReport = await Reporte.Reportes.findById({_id: Report_Id});
-        if(!existingReport) return res.status(200).json({message : "El reporte no existe"});
-		res.status(200).json({result: existingReport});
+        const report = await Reporte.Reportes.findById(id);
+		res.send({data: report});
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 	}

@@ -3,7 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Typography from '@mui/material/Typography';
-import Title from './Title';
+import Title from '../../Title/Title';
 import { Box  } from '@mui/system';
 import { getReportsNuevos, getReportsCompleto, getReportsProceso} from '../../../api';
 

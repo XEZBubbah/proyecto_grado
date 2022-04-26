@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getUser } from '../../actions/users';
 import { Typography, Paper, CircularProgress } from '@mui/material';
+import { getReport } from '../../actions/reports';
 
-const UserDetails = () => {
+const ReportDetail = () => {
 
-  const { user, users, isLoading } = useSelector((state)=>state.users)
+  const { report, reports, isLoading } = useSelector((state)=>state.reports)
   const dispatch = useDispatch();
   const history = useNavigate();
   const  id  = useParams();
 
   useEffect(()=>{
-    dispatch(getUser(id.id));
+    dispatch(getReport(id.id));
   },[id])
-  
+
   if (isLoading) {
     return (
       <Paper elevation={6}>
@@ -22,12 +22,13 @@ const UserDetails = () => {
       </Paper>
     );
   }
-  console.log(user);
+  console.log(report);
+  
   return (
     <div>
-    <Typography>asdasdsad{user.Nombre}</Typography>
+    <Typography>asdasdsad{report.Asunto}</Typography>
     </div>
   )
 }
 
-export default UserDetails
+export default ReportDetail

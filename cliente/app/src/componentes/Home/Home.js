@@ -13,7 +13,6 @@ import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const drawerWidth = 240;
 
@@ -83,12 +82,6 @@ function Home() {
                 </Typography>
 
                 <Avatar alt={user?.result.nombre} sx={{ mr: 3}} src={user?.result.imageUrl}>{user?.result.Nombre.charAt(0)}</Avatar>
-
-                <IconButton color="inherit" sx={{ mr: 3}} >
-                  <Badge badgeContent={4} color="secondary">
-                    <NotificationsIcon />
-                  </Badge>
-                </IconButton>
               
                 <Button variant="contained" onClick={logout}>Cerrar Sesión</Button>
               </Toolbar>

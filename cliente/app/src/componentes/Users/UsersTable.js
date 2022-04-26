@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import Title from './Title';
+import Title from '../Title/Title';
 import { getUsers } from '../../actions/users';
 
 const UsersTable = () => {

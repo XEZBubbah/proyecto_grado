@@ -15,10 +15,10 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import MainList from "../DashList/MainList";
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import MainList from "../DashList/MainList";
-import ReportsTable from "./ReportsTable";
+import Map from './Map';
 
 const drawerWidth = 240;
 
@@ -68,14 +68,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
-const Reports = () => {
-
+const Cartografia = () => {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
+
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const [usuariosTotal, setUsuariosTotal] = useState(0);
   const dispatch = useDispatch();
   const history = useNavigate();
   const location = useLocation();
@@ -85,12 +86,14 @@ const Reports = () => {
     setUser(JSON.parse(localStorage.getItem('profile')));
   },[location])
 
+
+
   const logout= () => {
     dispatch({type: 'LOGOUT'})
     history('/')
     setUser(null);
   }
-  
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -169,8 +172,7 @@ const Reports = () => {
                         height: '100%',
                       }}
                     >
-                      <ReportsTable>  
-                      </ReportsTable>
+                        <Map></Map>
                     </Paper>
                 </Grid>
               </Container>
@@ -180,4 +182,4 @@ const Reports = () => {
   )
 }
 
-export default Reports
+export default Cartografia

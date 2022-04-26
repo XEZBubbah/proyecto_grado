@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { CircularProgress } from '@mui/material';
-import Title from './Title';
+import Title from '../../Title/Title';
 import { Box  } from '@mui/system';
 import { getUsers } from '../../../actions/users';
 

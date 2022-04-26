@@ -6,6 +6,9 @@ import Dashboard from "./componentes/Dashboard/Dashboard";
 import Users from "./componentes/Users/Users";
 import UserDetails  from "./componentes/User/UserDetails";
 import Reports from "./componentes/Reports/Reports";
+import ReportDetail from "./componentes/Report/ReportDetail";
+import Cartografia from "./componentes/Cartografía/Cartografia";
+import Profile from "./componentes/Profile/Profile";
 
 const App = () => {
     const user = JSON.parse(localStorage.getItem('profile'));
@@ -20,6 +23,9 @@ const App = () => {
                 <Route path="/users" exact element={<Users/>}/>
                 <Route path="/users/:id" element={<UserDetails/>}/>
                 <Route path="/reports" exact element={<Reports/>}/>
+                <Route path="/reports/:id" element={<ReportDetail/>}/>
+                <Route path="/cartography" exact element={<Cartografia/>}/>
+                <Route path="/profile" exact element={<Profile/>}/>
             </Routes>
         </div>        
     </BrowserRouter>

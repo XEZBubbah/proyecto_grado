@@ -23,10 +23,10 @@ const MainList = () =>{
         history('/reports');
     }
     function cartografia(){
-        history('/dashboard');
+        history('/cartography');
     }
     function profile(){
-        history('/dashboard');
+        history('/profile');
     }
     return(
         <List component="nav">

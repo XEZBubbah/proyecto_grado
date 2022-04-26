@@ -16,6 +16,7 @@ export const getUsers = () => API.get('userA/getUsers');
 export const getUser = (id) => API.get(`userA/${id}`)
 //reports
 export const fetchAllReports = () => API.post('/reportA/fetchAllReports');
+export const fetchReport = (id) => API.post(`/reportA/${id}`);
 export const getReportsNuevos = () => API.get('/reportA/getReportsNuevos');
 export const getReportsProceso = () => API.get('/reportA/getReportsProceso');
 export const getReportsCompleto = () => API.get('/reportA/getReportsCompleto');

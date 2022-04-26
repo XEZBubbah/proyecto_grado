@@ -11,12 +11,10 @@ const secret = 'test';
 exports.signin = async(req,res) => {
 	const {email, password} = req.body;
 	try {
-		console.log("correo " + email,password);
 		const existingUser = await User.UsuariosAdmin.findOne({Correo: email });
 		if(!existingUser) return res.status(404).json({ message: "El usuario no existe"});
 		const isPasswordCorrect = await bcrypt.compare(password, existingUser.Contraseña);
 		if(!isPasswordCorrect) return res.status(404).json({ message:"La contraseña no es correcta"});
-
 		const token = jwt.sign({Correo: existingUser.Correo, id: existingUser._id}, secret, {expiresIn: "1h"});
 
 		res.status(200).json({result:existingUser, token});

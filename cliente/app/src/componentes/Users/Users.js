@@ -12,13 +12,11 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import UsersTable from "./UsersTable";
 import MainList from "../DashList/MainList";
 
@@ -125,11 +123,6 @@ const Users = () => {
                 BikeApp Dashboard
               </Typography>
               <Avatar alt={user?.result.nombre} sx={{ mr: 3}} src={user?.result.imageUrl}>{user?.result.Nombre.charAt(0)}</Avatar>
-              <IconButton color="inherit" sx={{ mr: 3}} >
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
               <Button variant="contained" onClick={logout}>Cerrar Sesión</Button>
             </Toolbar>
           </AppBar>
