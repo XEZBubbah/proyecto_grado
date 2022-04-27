@@ -68,7 +68,6 @@ module.exports.Reportes = mongoose.model("Reportes",ReportesSchema);
 
 //Historico de chats relacionados a un usuario/grupo
 const chatGrupo = mongoose.Schema({
-    Avatar: {type: Buffer, contentType: String},
     Mensaje: {type: String, required:true},
     Fecha_Creacion: {type: Date, required:true},
     Grupos_Id: {type: SchemaTypes.ObjectId, required:true},
