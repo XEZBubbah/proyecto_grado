@@ -5,7 +5,6 @@ const Grupo = require("./../models/movilModel");
 const Itinerario = require("./../models/movilModel");
 const Chat = require("./../models/movilModel");
 const Reporte = require("./../models/movilModel");
-
 const secret = 'test';
 
 exports.signin = async(req,res) => {
@@ -27,26 +26,13 @@ exports.signin = async(req,res) => {
 }
 
 exports.signup = async(req,res) => {
-	console.log(req.body);
-	console.log("\n");
 	const {email, password, firstName, lastName, userName, birthDate, phone} = req.body;
 	try {
 		console.log(email, password, firstName, lastName, userName, birthDate, phone);
-		var avatarMap = {filename: "", path: "", mimetype: ""};
-
-		console.log("\nRequest file de la imagen");
-		console.log(req.file);
-		console.log("\n");
 
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
 		if(existingUser) return res.status(400).json({message: "El usuario ya existe"});
 		const hashedPassword = await bcrypt.hash(password, 12);
-		
-		if(req.file) {
-			avatarMap.filename = req.file.filename;
-			avatarMap.path = req.file.path;
-			avatarMap.mimetype = req.file.mimetype;
-		}
 
 		const result = await User.UsuariosAppMovil.create({
 			Nombre: firstName, 
@@ -55,8 +41,7 @@ exports.signup = async(req,res) => {
 			Fecha_Nacimiento: birthDate,
 			Celular: phone,
 			Correo: email, 
-			Contraseña: hashedPassword,
-			Avatar: avatarMap
+			Contraseña: hashedPassword
 		});
 		res.status(200).json({result: result});
 	} catch (error) {

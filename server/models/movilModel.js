@@ -11,8 +11,7 @@ const UsuariosAppMovilSchema = mongoose.Schema({
     Fecha_Nacimiento: {type: Date, required:true},
     Celular: {type: String, required:true},
     Correo: {type: String, required:true},
-    Contraseña: {type: String, required:true},
-    Avatar: {type: Map}
+    Contraseña: {type: String, required:true}
 });
 module.exports.UsuariosAppMovil = mongoose.model("UsuariosAppMovil",UsuariosAppMovilSchema);
 
