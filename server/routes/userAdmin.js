@@ -9,6 +9,7 @@ const fetchUserInfoAdmin = require("../controllers/userAdmin.js");
 const fetchUserInfoMovil = require("../controllers/userAdmin.js");
 const modifyUserInfoAdmin = require("../controllers/userAdmin.js");
 const deleteUserAccountMovil = require("../controllers/userAdmin.js");
+const deleteUserAccountAdmin = require("../controllers/userAdmin.js");
 const getUsers = require("../controllers/userAdmin.js");
 const getUserMovil = require("../controllers/userAdmin.js");
 
@@ -35,6 +36,7 @@ router.post('/fetchAllUsers', fetchAllUsers.fetchAllUsers);
 router.post('/fetchUserInfoAdmin', fetchUserInfoAdmin.fetchUserInfoAdmin);
 router.post('/modifyUserInfoAdmin', modifyUserInfoAdmin.modifyUserInfoAdmin);
 router.post('/deleteUserAccountMovil', deleteUserAccountMovil.deleteUserAccountMovil);
+router.post('/deleteUserAccountAdmin', deleteUserAccountAdmin.deleteUserAccountAdmin);
 router.get('/getUsers', getUsers.getUsers);
 router.get('/:id', getUserMovil.getUserMovil);
 

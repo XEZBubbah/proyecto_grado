@@ -4,6 +4,7 @@ const Reporte = require("./../models/movilModel");
 exports.createReport = async (req, res) => {
     const { Asunto,Descripcion,Tipo_Reporte,Usuario} = req.body;
     try {
+        console.log(Asunto,Descripcion,Tipo_Reporte,Usuario);
         const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
         if(!existingUser) return res.status(400).json({ message: "El usuario no existe"});
         const reportes = await Reporte.Reportes.create({ 
@@ -26,6 +27,7 @@ exports.createReport = async (req, res) => {
 exports.fetchReportMovil = async(req,res) => {
 	const {Usuario} = req.body;
 	try {
+        console.log(Usuario);
         const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
         if(!existingUser) return res.status(400).json({ message: "El usuario no existe"});
         const existingReport = await Reporte.Reportes.find({UAppMov_Id: existingUser.id});

@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 
 exports.dbconnect = function(app,PORT) {
-    console.log(process.env.NODE_ENV);
-    console.log(process.env.DATABASE_NAME);
-    let db_name = process.env.DATABASE_NAME;
+    var db_name = process.env.DATABASE_NAME;
     if(process.env.NODE_ENV == 'testing') db_name = 'testCiclorrutaDB'; 
     const CONNECTION_URL = `mongodb+srv://${process.env.USER}:${process.env.PASS}@clusterciclorrutas.jp40z.mongodb.net/${db_name}?retryWrites=true&w=majority`;
         mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })

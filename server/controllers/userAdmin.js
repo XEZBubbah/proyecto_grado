@@ -71,7 +71,8 @@ exports.fetchAdminAvatar = async(req,res) => {
 			  'x-sent': true
 			}
 		}
-		res.sendFile(filename, options);
+		if(filename) res.sendFile(filename, options);
+		res.status(200).json({message: "El usuario no tiene asociada una foto"});
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
@@ -129,8 +130,10 @@ exports.fetchUserInfoAdmin = async(req,res) => {
 }
 
 exports.getUserMovil = async(req,res) =>{
-	const { id } =req.params;
+	const { id } = req.params;
 	try{
+		console.log(req.params);
+		console.log(req.body);
 		const user = await UserMov.UsuariosAppMovil.findById(id);
 		res.send({data: user});
 	}catch(error){

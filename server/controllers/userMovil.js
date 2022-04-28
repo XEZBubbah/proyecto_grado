@@ -12,6 +12,7 @@ exports.signin = async(req,res) => {
 	try {
 		console.log(userName,password);
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: userName});
+		console.log(existingUser);
 		if(!existingUser) return res.status(400).json({ message: "El usuario no existe"});
 		
 		const isPasswordCorrect = await bcrypt.compare(password, existingUser.Contraseña);
@@ -31,6 +32,7 @@ exports.signup = async(req,res) => {
 		console.log(email, password, firstName, lastName, userName, birthDate, phone);
 
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
+		console.log(existingUser);
 		if(existingUser) return res.status(400).json({message: "El usuario ya existe"});
 		const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -63,28 +65,6 @@ exports.fetchUserInfo = async(req,res) => {
 				Correo: existingUser.Correo,
 			}
 		});
-	} catch (error) {
-		res.status(500).json({message: "Algo salió mal durante la petición"});
-		console.log(error);
-	}
-}
-
-exports.fetchUserAvatar = async(req,res) => {
-	const { Usuario } = req.params;
-	try {
-		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario });
-		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
-		console.log(existingUser.Avatar);
-		var filename = existingUser.Avatar.get("filename");
-		var options = {
-			root: './uploads',
-			dotfiles: 'deny',
-			headers: {
-			  'x-timestamp': Date.now(),
-			  'x-sent': true
-			}
-		}
-		res.sendFile(filename, options);
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
