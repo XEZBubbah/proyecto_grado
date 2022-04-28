@@ -136,11 +136,8 @@ exports.vinculateToItinerary = async(req, res) => {
 exports.createItinerary = async(req, res) => {
     const { Nombre_Itinerario, Hora_Salida, Hora_Llegada, Punto_Partida, 
         Punto_Llegada, Descripcion, Usuario, Nombre_Grupo} = req.body;
-
     try{
         console.log(Nombre_Itinerario, Hora_Salida, Hora_Llegada, Punto_Partida, Punto_Llegada, Descripcion, Usuario, Nombre_Grupo);
-        console.log("Partida: "+Punto_Partida.longitud)
-        console.log(typeof Punto_Partida.longitud)
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 		

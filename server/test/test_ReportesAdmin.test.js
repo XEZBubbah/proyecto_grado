@@ -24,6 +24,12 @@ describe('Reportes Admin web', () => {
 
     describe('POST: /fetchAllReports', () => {
         it('Fetch All Reports Created by Mobile Users', (done) => {            // test case 1
+            //Clean Up Extra Data Generated From Test ItinerarioMovil
+            mongoose.connection.db.collection("grupos").deleteMany({
+                Nombre_Grupo: "Grupo prueba 1", UAppMov_Usuario: {$in: ["JAX007","JAX008"]}
+            }).catch((err) => {console.log(`Error Grupos: ${err}`);});
+            /////////////////////////////////////////////////////////
+
             mongoose.connection.db.collection("usuariosappmovils").insertOne({
                 Nombre: "Luis", Apellido: "Martinez", Usuario: "JAX007", Fecha_Nacimiento:"07-12-2000",
                 Celular: "3103918404", Correo: "luis66@gmail.com", Contraseña: "123" 

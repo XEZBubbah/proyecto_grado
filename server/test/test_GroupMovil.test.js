@@ -119,7 +119,6 @@ describe('Group Mobile User', () => {
                 expect(res.statusCode).to.equal(200);
                 done();
             }).catch((err) => done(err)).finally(() =>{
-                id: { $in: [10, 2, 3, 5]}
                 mongoose.connection.db.collection("usuariosappmovils").deleteMany({
                     Usuario: { $in: ["JAX007","JAX008"]}
                 }).catch((err) =>{
