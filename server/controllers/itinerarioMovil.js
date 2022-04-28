@@ -5,7 +5,6 @@ const Group = require('./../models/movilModel');
 exports.getGroupItineraries = async(req, res) => {
     const {Usuario, Grupo} = req.body;
     try {
-		console.log(Usuario, Grupo);
         const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 
@@ -22,8 +21,6 @@ exports.getGroupItineraries = async(req, res) => {
         var filteredItineraries = await Itinerary.Itinerarios.find({
             Nombre_Itinerario : {$nin: itinerarynames}
         });
-        console.log("\nItinerarios");
-        console.log(filteredItineraries);
 
         res.status(200).json({result: filteredItineraries});
 	} catch (error) {
@@ -35,7 +32,6 @@ exports.getGroupItineraries = async(req, res) => {
 exports.getUserItineraries = async(req, res) => {
     const {Usuario, Grupo} = req.body;
     try {
-		console.log(Usuario,Grupo);
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 		
@@ -59,7 +55,6 @@ exports.getUserItineraries = async(req, res) => {
 exports.getUserItinerary = async(req, res) => {
     const {Usuario, Grupo, Itinerario} = req.body;
     try {
-		console.log(Usuario,Grupo,Itinerario);
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 		
@@ -84,10 +79,8 @@ exports.vinculateToItinerary = async(req, res) => {
     const {Usuario, Grupo, Itinerario} = req.body;
 
     try {
-        console.log(Usuario, Grupo, Itinerario);
         const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
         if(!user) return res.status(400).json({message: "No se encuentra un usuario relacionado en el sistema"});
-        console.log("Usuario a vincular Itinerario");
 
         //Se verifica que el usuario este vinculado al grupo donde se encuentra el itinerario
         const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Grupo, UAppMov_Usuario: Usuario});
@@ -137,7 +130,6 @@ exports.createItinerary = async(req, res) => {
     const { Nombre_Itinerario, Hora_Salida, Hora_Llegada, Punto_Partida, 
         Punto_Llegada, Descripcion, Usuario, Nombre_Grupo} = req.body;
     try{
-        console.log(Nombre_Itinerario, Hora_Salida, Hora_Llegada, Punto_Partida, Punto_Llegada, Descripcion, Usuario, Nombre_Grupo);
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 		
@@ -178,10 +170,6 @@ exports.editItinerary = async(req, res) => {
     } = req.body;
 
     try{
-        console.log(
-            Nombre_ItinerarioNew, Nombre_ItinerarioOld, Hora_Salida, Hora_Llegada, Punto_Partida, 
-            Punto_Llegada, Descripcion, Usuario, Nombre_Grupo
-        );
         var update = {};
 
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
@@ -229,7 +217,6 @@ exports.editItinerary = async(req, res) => {
 exports.deleteItinerary = async(req, res) => {
     const {Usuario, Grupo, Itinerario} = req.body;
     try {
-		console.log(Usuario,Grupo,Itinerario);
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 		

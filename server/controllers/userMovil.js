@@ -10,9 +10,7 @@ const secret = 'test';
 exports.signin = async(req,res) => {
 	const { userName, password } =req.body;
 	try {
-		console.log(userName,password);
 		const existingUser = await User.UsuariosAppMovil.findOne({Usuario: userName});
-		console.log(existingUser);
 		if(!existingUser) return res.status(400).json({ message: "El usuario no existe"});
 		
 		const isPasswordCorrect = await bcrypt.compare(password, existingUser.Contraseña);
@@ -29,10 +27,7 @@ exports.signin = async(req,res) => {
 exports.signup = async(req,res) => {
 	const {email, password, firstName, lastName, userName, birthDate, phone} = req.body;
 	try {
-		console.log(email, password, firstName, lastName, userName, birthDate, phone);
-
 		const existingUser = await User.UsuariosAppMovil.findOne({Correo:email, Usuario:userName});
-		console.log(existingUser);
 		if(existingUser) return res.status(400).json({message: "El usuario ya existe"});
 		const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -74,8 +69,6 @@ exports.fetchUserInfo = async(req,res) => {
 exports.fetchAllUsers = async(req,res) => {
 	try {
 		const allUsers = await User.UsuariosAppMovil.find({});
-		console.log("Usuarios registrados en la APPMovil");
-		console.log(allUsers);
 		//Filtrar documentos quitando informacion de campos sin interes para esta funcion
 		Object.keys(allUsers).map(key => {
             allUsers[key]._id = null
@@ -95,13 +88,8 @@ exports.deleteUserAccount = async(req,res) => {
 		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
 		const user_Id = existingUser.id;
 
-		console.log("\nUsuario a eliminar..\n");
-		console.log(existingUser);
-
 		//Itinerarios asociados al usuario
 		const itinerariosUser = await Itinerario.Itinerarios.find({UAppMov_Id: user_Id});
-		console.log("\nItinerarios asociados al usuario\n");
-		console.log(itinerariosUser);
 
 		//Extrae las llaves para iterar sobre itinerariosUser con esta estructura [{},{},{}]
 		var indices_I = Object.keys(itinerariosUser)
@@ -112,8 +100,7 @@ exports.deleteUserAccount = async(req,res) => {
 
 		//Grupos asociados al usuario
 		const gruposUser = await Grupo.Grupos.find({UAppMov_Id: user_Id});
-		console.log("\nGrupos asociados al usuario\n");
-		console.log(gruposUser);
+
 		//Extrae las llaves para iterar sobre itinerariosUser con esta estructura [{},{},{}]
 		var indices_G = Object.keys(gruposUser)
 		for(iter of indices_G) {

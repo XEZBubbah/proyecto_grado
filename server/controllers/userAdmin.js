@@ -27,14 +27,11 @@ exports.signup = async(req,res) => {
 	const {email, password, confirmPassword, firstName, lastName} = req.body;
 	try {
 		var avatarMap = {filename: "", path: "", mimetype: ""};
-		console.log("\nRequest file de la imagen");
-		console.log(req.file);
 
 		const existingUser = await User.UsuariosAdmin.findOne({Correo: email });
 		if(existingUser) return res.status(400).json({ message: "El usuario ya existe"});
 		//if(password !== confirmPassword) return res.status(400).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
-		console.log(email, password, firstName);
 
 		if(req.file) {
 			avatarMap.filename = req.file.filename;
@@ -61,7 +58,7 @@ exports.fetchAdminAvatar = async(req,res) => {
 	try {
 		const existingUser = await User.UsuariosAdmin.findOne({Correo: email });
 		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
-		console.log(existingUser.Avatar);
+
 		var filename = existingUser.Avatar.get("filename");
 		var options = {
 			root: './uploads',
@@ -92,8 +89,6 @@ exports.fetchUserCuantity = async(req,res) => {
 exports.fetchAllUsers = async(req,res) => {
 	try {
 		const allUsers = await UserMov.UsuariosAppMovil.find({});
-		console.log("Usuarios registrados en la APPMovil");
-		console.log(allUsers);
 		res.status(200).json(allUsers);
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
@@ -132,8 +127,6 @@ exports.fetchUserInfoAdmin = async(req,res) => {
 exports.getUserMovil = async(req,res) =>{
 	const { id } = req.params;
 	try{
-		console.log(req.params);
-		console.log(req.body);
 		const user = await UserMov.UsuariosAppMovil.findById(id);
 		res.send({data: user});
 	}catch(error){
@@ -146,7 +139,6 @@ exports.fetchUserInfoMovil = async(req,res) => {
 	const { Usuario } = req.body;
 	try {
 		const existingUser = await UserMov.UsuariosAppMovil.findOne({Usuario: Usuario });
-		console.log(Usuario);
 		if(!existingUser) return res.status(400).json({ message: "No existe el usuario"});
 		res.status(200).json({
 			result: {
@@ -200,14 +192,9 @@ exports.deleteUserAccountAdmin = async(req,res) => {
 
 		const isPasswordCorrect = await bcrypt.compare(password, existingUser.Contraseña);
 		if(!isPasswordCorrect) return res.status(200).json({ message:"La contraseña no es correcta"});
-
-		console.log("\nUsuario a eliminar..\n");
-		console.log(existingUser);
 		
 		//Reportes asociados al usuario
 		const reportesUser = await reporte.Reportes.find({UAppMov_Id: user_Id});
-		console.log("\nReportes asociados al usuario\n");
-		console.log(reportesUser);
 		
 		//Extrae las llaves para iterar sobre reportesUser con esta estructura [{},{},{}]
 		var indices_G = Object.keys(reportesUser)
@@ -231,34 +218,24 @@ exports.deleteUserAccountMovil = async(req,res) => {
 		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
 		const user_Id = existingUser.id;
 
-		console.log("\nUsuario a eliminar..\n");
-		console.log(existingUser);
-
 		//Itinerarios asociados al usuario
 		const itinerariosUser = await Itinerario.Itinerarios.find({UAppMov_Id: user_Id});
-		console.log("\nItinerarios asociados al usuario\n");
-		console.log(itinerariosUser);
 
 		//Extrae las llaves para iterar sobre itinerariosUser con esta estructura [{},{},{}]
 		var indices_I = Object.keys(itinerariosUser)
 		for(iter of indices_I) {
 			var id_Itinerario = itinerariosUser[iter]["_id"];
 			var itinerarioDeleted = await Itinerario.Itinerarios.findByIdAndDelete({_id: id_Itinerario});
-  			console.log(id_Itinerario);
-			console.log(itinerarioDeleted);
 		}
 
 		//Grupos asociados al usuario
 		const gruposUser = await Grupo.Grupos.find({UAppMov_Id: user_Id});
-		console.log("\nGrupos asociados al usuario\n");
-		console.log(gruposUser);
+
 		//Extrae las llaves para iterar sobre itinerariosUser con esta estructura [{},{},{}]
 		var indices_G = Object.keys(gruposUser)
 		for(iter of indices_G) {
 			var id_Grupo = gruposUser[iter]["_id"];
 			var grupoDeleted = await Grupo.Grupos.findByIdAndDelete({_id: id_Grupo});
-  			console.log(id_Grupo);
-			console.log(grupoDeleted);
 		}
 
 		//Eliminacion del usuario

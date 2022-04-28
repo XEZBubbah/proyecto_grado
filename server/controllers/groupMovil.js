@@ -12,12 +12,11 @@ exports.createGroup = async(req,res) => {
         const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
         if(!user) return res.status(400).json({ message: "No se encuentra un usuario relacionado"});
         const user_Id = user.id;
-        console.log("Usuario Grupo");
-        console.log(user);
+
         //Se busca la existencia de un grupo con el mismo nombre, sabiendo que el nombre del grupo es único
 		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo});
         if(existingGroup) return res.status(400).json({ message: "Ya existe un grupo con el mismo nombre"});
-        console.log(existingGroup);
+
         var hashedPassword = ''
         var visibility = 'Publico'
         if(Visibilidad == false && Contraseña_Grupo.length == 0) {
@@ -57,8 +56,7 @@ exports.fetchGroup = async(req,res) => {
         var filteredGroups = await Group.Grupos.find({
             Nombre_Grupo : {$nin: groupsname}
         });
-        console.log("\nGrupos");
-        console.log(filteredGroups);
+
         //Filtrar documentos quitando informacion de campos sin interes para esta funcion
         Object.keys(filteredGroups).map(key => {
             filteredGroups[key].Contraseña_Grupo = null
@@ -78,12 +76,8 @@ exports.fetchUserGroup = async(req,res) => {
         const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
         if(!user) return res.status(400).json({message: "No se encuentra un usuario relacionado"});
         const user_Id = user.id;
-        console.log("Usuario Grupo");
-        console.log(user);
 
 		var existingGroups = await Group.Grupos.find({UAppMov_Usuario: Usuario});
-        console.log("Grupos existentes");
-        console.log(existingGroups);
 
         //Filtrar documentos quitando informacion de campos sin interes para esta funcion
         Object.keys(existingGroups).map(key => {
@@ -106,13 +100,10 @@ exports.getGroup = async(req,res) => {
         const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
         if(!user) return res.status(400).json({ message: "No se encuentra un usuario relacionado"});
         const user_Id = user.id;
-        console.log("Usuario Grupo");
-        console.log(user);
 
 		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Usuario: Usuario});
         if(!existingGroup) return res.status(400).json({ message: "No existe un grupo relacionado a este nombre o usuario"});
-        console.log("Grupo existente");
-        console.log(existingGroup);
+
         const visibility = existingGroup.Visibilidad;
         if(visibility == 'Publico') {
             res.status(200).json({
@@ -151,13 +142,9 @@ exports.deleteUserGroup = async(req, res) => {
         const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
         if(!user) return res.status(400).json({ message: "No se encuentra un usuario relacionado"});
         const user_Id = user.id;
-        console.log("Usuario Grupo");
-        console.log(user);
 
 		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Usuario: Usuario});
         if(!existingGroup) return res.status(400).json({ message: "No existe un grupo relacionado a este nombre o usuario"});
-        console.log("Grupo existente");
-        console.log(existingGroup);
 
         if(existingGroup.Permiso == 'I') return res.status(404).json({message: "No posees los permisos para eliminar este grupo"});
 
@@ -184,12 +171,10 @@ exports.vinculateToGroup = async(req, res) => {
     try {
         const user = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
         if(!user) return res.status(400).json({ message: "No se encuentra un usuario relacionado"});
-        console.log("Usuario a vincular Grupo");
-        console.log(user);
+
         //Se busca la existencia de un grupo con el mismo nombre, sabiendo que el nombre del grupo es único
 		const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo});
         if(!existingGroup) return res.status(400).json({ message: `No existe un grupo con el nombre ${Nombre_Grupo}`});
-        console.log(existingGroup);
 
         const existingVinculateUser = await Group.Grupos.findOne({Nombre_Grupo: Nombre_Grupo, UAppMov_Usuario: Usuario});
         if(existingVinculateUser) return res.status(400).json({

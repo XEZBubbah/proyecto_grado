@@ -5,13 +5,10 @@ const Group = require('./../models/movilModel');
 exports.storeUserMessages = async(req, res) => {
     const {text, Usuario, Grupo, createdAt} = req.body;
     try{
-        console.log(text, Usuario, Grupo, createdAt);
         const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
-        console.log(existingUser);
         if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 
         const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Grupo, UAppMov_Usuario: Usuario});
-        console.log(existingGroup);
         if(!existingGroup) return res.status(400).json({message: "El grupo no se encuentra asociado al usuario ingresado"});
 
         const newChatRecord = await Chat.chatGrupo.create({
@@ -43,7 +40,6 @@ exports.fetchChatMessages = async(req, res) => {
             //Se almacena en un array los ids de los usuarios asociados al grupo
             userGroupIds.push(existingGroups[id].UAppMov_Id);
         }
-        console.log(userGroupIds);
         //Se trae los mensajes de todos los usuarios asociados a ese grupo (chat) de forma descendente
         //por el atributo fecha de creacion 
         const chatMessages = await Chat.chatGrupo.find({
@@ -51,7 +47,6 @@ exports.fetchChatMessages = async(req, res) => {
             Grupos_Nombre_Grupo: groupName
         }).sort({Fecha_Creacion: 'desc'}).snapshot(true);
 
-        console.log(chatMessages);
         res.status(200).json({result: chatMessages});
     } catch (error) {
         res.status(500).json({message: "Algo salió mal durante la petición"});
