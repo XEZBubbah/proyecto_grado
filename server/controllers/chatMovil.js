@@ -1,23 +1,20 @@
 const Chat = require('./../models/movilModel');
 const User = require('./../models/movilModel');
 const Group = require('./../models/movilModel');
-const mongoose = require("mongoose");
 
 exports.storeUserMessages = async(req, res) => {
     const {text, Usuario, Grupo, createdAt} = req.body;
     try{
         console.log(text, Usuario, Grupo, createdAt);
-
         const existingUser = await User.UsuariosAppMovil.findOne({Usuario: Usuario});
+        console.log(existingUser);
         if(!existingUser) return res.status(400).json({message: "El usuario no existe"});
 
-        const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Grupo, UAppMov_Id: existingUser.id});
+        const existingGroup = await Group.Grupos.findOne({Nombre_Grupo: Grupo, UAppMov_Usuario: Usuario});
+        console.log(existingGroup);
         if(!existingGroup) return res.status(400).json({message: "El grupo no se encuentra asociado al usuario ingresado"});
-        console.log(existingUser);
 
-        var fecha = new Date();
         const newChatRecord = await Chat.chatGrupo.create({
-            //Avatar: '',
             Mensaje: text,
             Fecha_Creacion: createdAt,
             Grupos_Id: existingGroup.id,

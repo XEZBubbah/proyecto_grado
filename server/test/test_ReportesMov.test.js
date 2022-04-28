@@ -66,7 +66,14 @@ describe('Reportes aplicacion movil', () => {
                 expect(res.statusCode).to.equal(200);
                 done();
             }).catch((err) => done(err)).finally(() =>{
-                mongoose.connection.db.collection("usuariosappmovils").deleteOne({Usuario: "JAX007"});
+                mongoose.connection.db.collection("reportes").deleteOne({UAppMov_Usuario: "JAX007"})
+                .catch((err) =>{
+                    console.log(`Error: ${err}`);
+                });
+                mongoose.connection.db.collection("usuariosappmovils").deleteOne({Usuario: "JAX007"})
+                .catch((err) =>{
+                    console.log(`Error: ${err}`);
+                });
             })
         });
     });
