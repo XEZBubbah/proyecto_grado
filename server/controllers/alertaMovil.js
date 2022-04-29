@@ -6,8 +6,8 @@ exports.setAlert = async(req,res) => {
         console.log(Nombre_Alerta, Descripcion, latitude, longitude);
         if(Nombre_Alerta === "") res.status(400).json({message: "Debe establecer el asunto"});
         if(Descripcion === "") res.status(400).json({message: "Debe establecer la descripcion"});
-        if(latitude === "") res.status(400).json({message: "Debe establecer la latitud"});
-        if(longitude === "") res.status(400).json({message: "Debe establecer la longitud"});
+        if(typeof latitude == 'undefined') res.status(400).json({message: "Debe establecer la latitud"});
+        if(typeof latitude == 'undefined') res.status(400).json({message: "Debe establecer la longitud"});
 
         const newAlert = await Alerta.alertasMapa.create({
             Nombre_Alerta: Nombre_Alerta,
