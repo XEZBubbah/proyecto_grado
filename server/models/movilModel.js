@@ -76,4 +76,14 @@ const chatGrupo = mongoose.Schema({
     UAppMov_Usuario: {type: String, required:true}
 });
 module.exports.chatGrupo = mongoose.model("chatGrupo",chatGrupo);
+
+//expires: seconds => 2h = 7200 seconds
+const alertasMapa = mongoose.Schema({
+    Nombre_Alerta: {type: String, required:true},
+    Descripcion: {type: String, required:true},
+    latitude: {type: String, required:true},
+    longitude: {type: String, required:true},
+    CreatedAt: {type: Date, expires: 7200, default: Date.now()}
+});
+module.exports.alertasMapa = mongoose.model("alertasMapa", alertasMapa);
 ///////////////////////////////

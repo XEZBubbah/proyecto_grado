@@ -10,6 +10,7 @@ const itineraryMovilRoutes = require("./routes/itinerarioMovil");
 const chatMovilRoutes = require("./routes/chatMovil");
 const reportMovilRoutes = require("./routes/reportesMovil");
 const reportAdminRoutes = require("./routes/reporteAdmin");
+const alertaMovilRoutes = require("./routes/alertaMovil");
 const config = require("./cors.js");
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -26,6 +27,7 @@ app.use('/userM', userMovilRoutes);
 app.use('/groupM', groupMovilRoutes);
 app.use('/itineraryM', itineraryMovilRoutes);
 app.use('/chatM', chatMovilRoutes);
+app.use('/alertaM', alertaMovilRoutes);
 
 //Conexión a la base de datos MongoDB
 mongooseConnect.dbconnect(app,PORT);
