@@ -66,14 +66,6 @@ describe('Mobile Chat Group', () => {
                 }).catch((err) =>{
                     console.log(`Error: ${err}`);
                 });
-                mongoose.connection.db.collection("grupos").deleteOne({Nombre_Grupo: "Grupo prueba 1"})
-                .catch((err) =>{
-                    console.log(`Error: ${err}`);
-                });
-                mongoose.connection.db.collection("usuariosappmovils").deleteOne({Usuario: "JAX007"})
-                .catch((err) =>{
-                    console.log(`Error: ${err}`);
-                });
             });
         });
     });

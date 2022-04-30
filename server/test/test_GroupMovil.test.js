@@ -24,6 +24,15 @@ describe('Group Mobile User', () => {
 
     describe('POST: /createGroupMov', () => {
         it('Create Mobile User Group', (done) => {            // test case 1
+            mongoose.connection.db.collection("grupos").deleteOne({Nombre_Grupo: "Grupo prueba 1"})
+            .catch((err) =>{
+                    console.log(`Error: ${err}`);
+            });
+            mongoose.connection.db.collection("usuariosappmovils").deleteOne({Usuario: "JAX007"})
+            .catch((err) =>{
+                    console.log(`Error: ${err}`);
+            });
+
             mongoose.connection.db.collection("usuariosappmovils").insertOne({
                 Nombre: "Luis", Apellido: "Martinez", Usuario: "JAX007", Fecha_Nacimiento:"07-12-2000",
                 Celular: "3103918404", Correo: "luis66@gmail.com", Contraseña: "123" 
