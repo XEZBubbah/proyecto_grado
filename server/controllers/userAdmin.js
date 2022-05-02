@@ -44,28 +44,29 @@ exports.signup = async(req,res) => {
 	}
 }
 
-exports.fetchAdminAvatar = async(req,res) => {
+/*exports.fetchAdminAvatar = async(req,res) => {
 	const { email } = req.params;
 	try {
 		const existingUser = await User.UsuariosAdmin.findOne({Correo: email });
-		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
-
-		var filename = existingUser.Avatar.get("filename");
-		var options = {
-			root: './uploads',
-			dotfiles: 'deny',
-			headers: {
-			  'x-timestamp': Date.now(),
-			  'x-sent': true
+		if(!existingUser) return res.status(200).json({message: "No existe el usuario"});
+		var filename = existingUser.Avatar;
+		if(filename != 'undefined'){
+			var options = {
+				root: './uploads',
+				dotfiles: 'deny',
+				headers: {
+					'x-timestamp': Date.now(),
+					'x-sent': true
+				}
 			}
+			res.sendFile(filename.get("filename"), options);
 		}
-		if(filename) res.sendFile(filename, options);
 		res.status(200).json({message: "El usuario no tiene asociada una foto"});
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
 	}
-}
+}*/
 
 exports.fetchUserCuantity = async(req,res) => {
 	try {
@@ -146,40 +147,44 @@ exports.fetchUserInfoMovil = async(req,res) => {
 
 exports.modifyUserInfoAdmin = async(req,res) => {
 	const {id, Correo, Nombre, Apellido} = req.body;
-	const existingUserOld = await User.UsuariosAdmin.findById(id);
-	if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
-	var update = {};
-	if(Correo === ""){
-		console.log('Correo vacio');
-		update.Correo=existingUserOld.Correo;
-	}else{
-		update.Correo = Correo;
+	try {
+		const existingUserOld = await User.UsuariosAdmin.findById(id);
+		if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
+		var update = {};
+		if(Correo === ""){
+			console.log('Correo vacio');
+			update.Correo=existingUserOld.Correo;
+		}else{
+			update.Correo = Correo;
+		}
+		if(Nombre === ""){
+			console.log('Nombre vacio');
+			update.Nombre=existingUserOld.Nombre;
+		}else{
+			update.Nombre = Nombre;
+		}
+		if(Apellido === ""){
+			console.log('Apellido vacio');
+			update.Apellido=existingUserOld.Apellido;
+		}else{
+			update.Apellido = Apellido;
+		}
+		const filter = { _id: id };
+		const opts = { new: true };
+		let modifyUser = await User.UsuariosAdmin.findOneAndUpdate(filter, update, opts);
+		const ModifiedUser = await User.UsuariosAdmin.findById(id);
+		const token = jwt.sign({Correo: ModifiedUser.Correo, id: ModifiedUser._id}, secret, {expiresIn: "1h"});
+		res.status(200).json({result:ModifiedUser, token});
+	} catch (error) {
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
 	}
-	if(Nombre === ""){
-		console.log('Nombre vacio');
-		update.Nombre=existingUserOld.Nombre;
-	}else{
-		update.Nombre = Nombre;
-	}
-	if(Apellido === ""){
-		console.log('Apellido vacio');
-		update.Apellido=existingUserOld.Apellido;
-	}else{
-		update.Apellido = Apellido;
-	}
-	const filter = { _id: id };
-	const opts = { new: true };
-	let modifyUser = await User.UsuariosAdmin.findOneAndUpdate(filter, update, opts);
-	const ModifiedUser = await User.UsuariosAdmin.findById(id);
-	const token = jwt.sign({Correo: ModifiedUser.Correo, id: ModifiedUser._id}, secret, {expiresIn: "1h"});
-	res.status(200).json({result:ModifiedUser, token});
 }
 
 exports.modifyAdminPass = async(req,res) => {
 	const {id, Contraseña, ContraseñaNueva, CContraseñaNueva} = req.body;
 	try{
 		const existingUserOld = await User.UsuariosAdmin.findById(id);	
-		console.log(existingUserOld);
 		if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
 		var update = {};
 		if(ContraseñaNueva === ""){
@@ -238,7 +243,6 @@ exports.deleteUserAccountAdmin = async(req,res) => {
 
 exports.deleteUserAccountMovil = async(req,res) => {
 	const {Usuario} = req.body;
-	console.log(Usuario);
 	try {
 		const existingUser = await UserMov.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});

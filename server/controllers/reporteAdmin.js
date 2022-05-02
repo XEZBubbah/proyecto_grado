@@ -47,7 +47,6 @@ exports.fetchReport = async(req,res) => {
 }
 
 exports.editReport = async(req,res) => {
-	console.log(req.body);
 	const {Report_Id, Estado} = req.body;
 	try {
         const existingReport = await Reporte.Reportes.findById(Report_Id);

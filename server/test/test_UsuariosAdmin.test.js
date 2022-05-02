@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const expect = require('chai').expect;
 const request = require('supertest');
 const app = require('../index');
+var adminId = ""
 
 describe('Usuarios aplicacion web', () => {
     before((done) => { 
@@ -46,6 +47,7 @@ describe('Usuarios aplicacion web', () => {
             } 
             request(app).post('/userA/signin').send(toSendData)
             .then((res) => {
+                adminId = res.body.result._id;
                 expect(res.statusCode).to.equal(200);
                 done();
             }).catch((err) => done(err))
@@ -62,7 +64,7 @@ describe('Usuarios aplicacion web', () => {
         });
     });
 
-    describe('GET: /fetchAdminAvatar/:email', () => {
+    /*describe('GET: /fetchAdminAvatar/:email', () => {
         it('Fetch Admin Avatar', (done) => {            // test case 2
             request(app).get("/userA/fetchAdminAvatar/cgonzalez672@unab.edu.co").send({})
             .then((res) => {
@@ -71,7 +73,7 @@ describe('Usuarios aplicacion web', () => {
                 done();
             }).catch((err) => done(err))
         });
-    });
+    });*/
 
     describe('POST: /fetchUserCuantity', () => {
         it('Fetch Quantity of All Mobile Users', (done) => {            // test case 2
@@ -128,10 +130,10 @@ describe('Usuarios aplicacion web', () => {
     describe('POST: /modifyUserInfoAdmin', () => {
         it('Modify Information of an Admin User', (done) => {            // test case 2
             let toSendData = { 
-                email: "cgonzalez672@unab.edu.co", 
-                nameNew: "Orlando Perez", 
-                passwordOld: "123", 
-                passwordNew: "1234"
+                id: adminId, 
+                Correo: "cgonzalez672@unab.edu.co", 
+                Nombre: "Orlando", 
+                Apellido: "Perez"
             }
             request(app).post('/userA/modifyUserInfoAdmin').send(toSendData)
             .then((res) => {
@@ -141,7 +143,20 @@ describe('Usuarios aplicacion web', () => {
         });
     });
 
-    describe('POST: /deleteUserAccountAdmin', () => {
+    describe('POST: /modifyAdminPass', () => {
+        it('Modify Password of an Admin User', (done) => {            // test case 2
+            let toSendData = { 
+                id: adminId, Contraseña: "123", ContraseñaNueva: "1234", CContraseñaNueva: "1234"
+            }
+            request(app).post('/userA/modifyAdminPass').send(toSendData)
+            .then((res) => {
+                expect(res.statusCode).to.equal(200);
+                done();
+            }).catch((err) => done(err))
+        });
+    });
+
+    /*describe('POST: /deleteUserAccountAdmin', () => {
         it('Delete an Admin User Account', (done) => {            // test case 2
             let toSendData = { 
                 Correo: "cgonzalez672@unab.edu.co", 
@@ -153,7 +168,7 @@ describe('Usuarios aplicacion web', () => {
                 done();
             }).catch((err) => done(err))
         });
-    });
+    });*/
 
     describe('POST: /deleteUserAccountMovil', () => {
         it('Delete a Mobile User Account', (done) => {            // test case 2
@@ -173,8 +188,13 @@ describe('Usuarios aplicacion web', () => {
                 .then((res) => {
                     expect(res.statusCode).to.equal(200);
                     done();
-                }).catch((err) => done(err))
-
+                }).catch((err) => done(err)).finally(() => {
+                    mongoose.connection.db.collection("usuariosadmins").deleteOne({
+                        Correo: "cgonzalez672@unab.edu.co", Nombre: "Orlando", Apellido: "Perez"
+                    }).catch((err) =>{
+                        console.log(`Error: ${err}`);
+                    });
+                });
             }).catch((err) =>{
                 console.log(`Error: ${err}`);
                 done();

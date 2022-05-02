@@ -52,9 +52,9 @@ describe('Reportes Admin web', () => {
         });
     });
     
-    describe('GET: /:id', () => {
+    describe('POST: /:id', () => {
         it('Fetch User Mobile Report by Its ID', (done) => {            // test case 2
-            request(app).get(`/reportA/${report_id}`).send({})
+            request(app).post(`/reportA/${report_id}`).send({})
             .then((res) => {
                 expect(res.statusCode).to.equal(200);
                 done();
@@ -62,14 +62,14 @@ describe('Reportes Admin web', () => {
         });
     });
 
-    describe('POST: /editReport', () => {
+    describe('PUT: /editReport', () => {
         it('Edit User Mobile Report', (done) => {            // test case 2
             let sendData = {
                 Report_Id: report_id, 
                 Estado: "F"
             }
             console.log(sendData);
-            request(app).post("/reportA/editReport").send(sendData)
+            request(app).put("/reportA/editReport").send(sendData)
             .then((res) => {
                 expect(res.statusCode).to.equal(200);
                 done();
@@ -107,10 +107,9 @@ describe('Reportes Admin web', () => {
         });
     });
     
-    describe('POST: /deleteReport', () => {
+    describe('DELETE: /deleteReport', () => {
         it('Delete User Mobile Report', (done) => {            // test case 2
-            let sendData = { Report_Id: report_id };
-            request(app).post("/reportA/deleteReport").send(sendData)
+            request(app).delete(`/reportA/deleteReport/${report_id}`).send({})
             .then((res) => {
                 expect(res.statusCode).to.equal(200);
                 done();
