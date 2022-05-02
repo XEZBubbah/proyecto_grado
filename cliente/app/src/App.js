@@ -18,14 +18,14 @@ const App = () => {
             <Routes>
                 <Route path="/" exact element={<Navigate to="/home"/>}/>
                 <Route path="/home" exact element={<Home/>}/>
-                <Route path="/dashboard" exact element={<Dashboard/>}/>
+                <Route path="/dashboard" exact element={user? <Dashboard/> : <Navigate to="/home"/>}/>
                 <Route path="/signin" exact element={user? <Navigate to="/home"/> : <Auth/>}/>
-                <Route path="/users" exact element={<Users/>}/>
-                <Route path="/users/:id" element={<UserDetails/>}/>
-                <Route path="/reports" exact element={<Reports/>}/>
-                <Route path="/reports/:id" element={<ReportDetail/>}/>
-                <Route path="/cartography" exact element={<Cartografia/>}/>
-                <Route path="/profile" exact element={<Profile/>}/>
+                <Route path="/users" exact element={user? <Users/>: <Navigate to="/home"/>}/>
+                <Route path="/users/:id" element={user?<UserDetails/> : <Navigate to="/home"/>}/>
+                <Route path="/reports" exact element={user?<Reports/> : <Navigate to="/home"/>}/>
+                <Route path="/reports/:id" element={user? <ReportDetail/> : <Navigate to="/home"/>}/>
+                <Route path="/cartography" exact element={user? <Cartografia/> : <Navigate to="/home"/>}/>
+                <Route path="/profile" exact element={user? <Profile/> : <Navigate to="/home"/>}/>
             </Routes>
         </div>        
     </BrowserRouter>
