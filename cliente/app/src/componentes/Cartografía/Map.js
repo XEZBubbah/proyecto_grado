@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useMemo} from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { Container, Box } from '@material-ui/core';
+import React  from 'react';
+import { Box } from '@material-ui/core';
 import Title from '../Title/Title';
-import { GoogleMap, LoadScript, Marker, KmlLayer} from "@react-google-maps/api";
+import { GoogleMap, LoadScript, KmlLayer} from "@react-google-maps/api";
 
 const containerStyle = {
     width: '100%',

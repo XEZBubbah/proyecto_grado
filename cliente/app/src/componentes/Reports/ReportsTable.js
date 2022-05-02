@@ -12,7 +12,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import EastIcon from '@mui/icons-material/East';
-import { getReports } from '../../actions/reports';
+import { getReport, getReports, eliminarReporte } from '../../actions/reports';
+import { deleteReport } from '../../api';
 
 const UsersTable = () => {
 
@@ -27,7 +28,13 @@ const UsersTable = () => {
 
     const handleEdit = (e,row) => {
       e.preventDefault();
+      dispatch(getReport(row,history));
       history(`/reports/${row}`);
+    }
+
+    const deleteR = (e,Report) => {
+      e.preventDefault();
+      dispatch(eliminarReporte(Report,history));
     }
 
     const columns = [
@@ -75,11 +82,14 @@ const UsersTable = () => {
         {
           field: "Eliminar",
           headerAlign: 'center', align: 'center', flex:'0,12',
-          renderCell: () => {
+          renderCell: (cellValues) => {
             return (
               <IconButton
                   color="inherit" 
                   sx={{ mr:1, ml:3}}
+                  onClick={(event,row) =>{
+                    deleteR(event,cellValues.row._id);
+                  }}
                 >
                 <DeleteIcon/>
               </IconButton>

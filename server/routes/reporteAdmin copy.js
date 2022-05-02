@@ -11,8 +11,8 @@ var router = express.Router();
 
 router.post('/fetchAllReports', fetchAllReports.fetchAllReports);
 router.post('/:id', fetchReport.fetchReport);
-router.put('/editReport', editReport.editReport);
-router.delete('/deleteReport/:id', deleteReport.deleteReport);
+router.post('/editReport', editReport.editReport);
+router.delete('/deleteReport', deleteReport.deleteReport);
 router.get('/getReportsNuevos', getReportsNuevos.getReportsNuevos);
 router.get('/getReportsProceso', getReportsProceso.getReportsProceso);
 router.get('/getReportsCompleto', getReportsCompleto.getReportsCompleto);

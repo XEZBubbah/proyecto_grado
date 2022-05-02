@@ -18,6 +18,7 @@ import Paper from '@mui/material/Paper';
 import MainList from "../DashList/MainList";
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ProfileInfo from './ProfileInfo';
 
 const drawerWidth = 240;
 
@@ -89,6 +90,7 @@ const Profile = () => {
   const logout= () => {
     dispatch({type: 'LOGOUT'})
     history('/')
+    history(0)
     setUser(null);
   }
 
@@ -162,15 +164,9 @@ const Profile = () => {
 
               <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
                 <Grid>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        height: '100%',
-                      }}
-                    >
-                    </Paper>
+                    <ProfileInfo>
+                        
+                    </ProfileInfo>
                 </Grid>
               </Container>
             </Box>

@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Title from '../Title/Title';
-import { getUsers } from '../../actions/users';
+import { deleteUserAccountMovil, getUser, getUsers } from '../../actions/users';
 
 const UsersTable = () => {
 
@@ -21,8 +21,15 @@ const UsersTable = () => {
     const allUsers = useSelector((state)=>state.users.users);
 
     const handleEdit = (e,row) => {
+      e.preventDefault();  
+      dispatch(getUser(row,history));
+      history(`/users/${row}`)
+    }
+
+    const deleteUser = (e,User) => {
+      const Usuario = { Usuario:User}
       e.preventDefault();
-      history(`/users/${row}`);
+      dispatch(deleteUserAccountMovil(Usuario,history));
     }
 
     const columns = [
@@ -52,11 +59,14 @@ const UsersTable = () => {
         {
           field: "Eliminar",
           headerAlign: 'center', align: 'center', flex:'0,12',
-          renderCell: () => {
+          renderCell: (cellValues) => {
             return (
               <IconButton
                   color="inherit" 
                   sx={{ mr:1, ml:3}}
+                  onClick={(event,row) => {
+                    deleteUser(event,cellValues.row.Usuario);
+                  }}
                 >
                 <DeleteIcon/>
               </IconButton>

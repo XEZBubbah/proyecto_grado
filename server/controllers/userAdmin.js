@@ -24,26 +24,17 @@ exports.signin = async(req,res) => {
 }
 
 exports.signup = async(req,res) => {
-	const {email, password, confirmPassword, firstName, lastName} = req.body;
+	const {email, password,firstName, lastName} = req.body;
 	try {
-		var avatarMap = {filename: "", path: "", mimetype: ""};
-
 		const existingUser = await User.UsuariosAdmin.findOne({Correo: email });
 		if(existingUser) return res.status(400).json({ message: "El usuario ya existe"});
-		//if(password !== confirmPassword) return res.status(400).json({ message: "Las contraseñas no coinciden"});
 		const hashedPassword = await bcrypt.hash(password, 12);
 
-		if(req.file) {
-			avatarMap.filename = req.file.filename;
-			avatarMap.path = req.file.path;
-			avatarMap.mimetype = req.file.mimetype;
-		}
 		const result = await User.UsuariosAdmin.create({
 			Correo: email, 
 			Contraseña: hashedPassword, 
 			Nombre: firstName, 
 			Apellido: lastName,
-			Avatar: avatarMap
 		});
 		const token = jwt.sign({email: result.email, id: result._id}, secret, {expiresIn: "1h"});
 		res.status(200).json({result, token});
@@ -153,35 +144,69 @@ exports.fetchUserInfoMovil = async(req,res) => {
 	}
 }
 
-exports.modifyUserInfoAdmin = async(req, res) => {
-	const {email, nameNew, passwordOld, passwordNew} = req.body;
-	const existingUserOld = await User.UsuariosAdmin.findOne({Correo: email});
-	if(!existingUserOld) return res.status(200).json({message: "No existe un usuario asociado"});
+exports.modifyUserInfoAdmin = async(req,res) => {
+	const {id, Correo, Nombre, Apellido} = req.body;
+	const existingUserOld = await User.UsuariosAdmin.findById(id);
+	if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
 	var update = {};
-
-	if(nameNew === ""){
-		console.log('Nombre vacio');
+	if(Correo === ""){
+		console.log('Correo vacio');
+		update.Correo=existingUserOld.Correo;
 	}else{
-		update.Nombre = nameNew;
+		update.Correo = Correo;
 	}
-	if(passwordNew === ""){
-		console.log('Contraseña vacia');
-	} else{
-		const isPasswordCorrect = await bcrypt.compare(passwordOld, existingUserOld.Contraseña);
-		if(!isPasswordCorrect) return res.status(200).json({ message:"La contraseña no es correcta"});
-		const hashedPassword = await bcrypt.hash(passwordNew, 12);
-		update.Contraseña = hashedPassword;
-	} 
-
-	const filter = { Correo: email };
+	if(Nombre === ""){
+		console.log('Nombre vacio');
+		update.Nombre=existingUserOld.Nombre;
+	}else{
+		update.Nombre = Nombre;
+	}
+	if(Apellido === ""){
+		console.log('Apellido vacio');
+		update.Apellido=existingUserOld.Apellido;
+	}else{
+		update.Apellido = Apellido;
+	}
+	const filter = { _id: id };
 	const opts = { new: true };
 	let modifyUser = await User.UsuariosAdmin.findOneAndUpdate(filter, update, opts);
-	//modifyUser = await User.UsuariosAppMovil.findOne({Usuario: userNameNew});
-	res.status(200).json({
-		result: 'Se ha modificado la información con exito',
-		Modificado: modifyUser
-	});
+	const ModifiedUser = await User.UsuariosAdmin.findById(id);
+	const token = jwt.sign({Correo: ModifiedUser.Correo, id: ModifiedUser._id}, secret, {expiresIn: "1h"});
+	res.status(200).json({result:ModifiedUser, token});
 }
+
+exports.modifyAdminPass = async(req,res) => {
+	const {id, Contraseña, ContraseñaNueva, CContraseñaNueva} = req.body;
+	try{
+		const existingUserOld = await User.UsuariosAdmin.findById(id);	
+		console.log(existingUserOld);
+		if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
+		var update = {};
+		if(ContraseñaNueva === ""){
+			return res.status(400).json({message: "No ingresó contraseña"});
+		} else{
+			const isPasswordCorrect = await bcrypt.compare(Contraseña, existingUserOld.Contraseña);
+			if(!isPasswordCorrect) return res.status(400).json({ message:"La contraseña no es correcta"});
+			if(ContraseñaNueva === CContraseñaNueva){				
+				const hashedPassword = await bcrypt.hash(ContraseñaNueva, 12);
+				update.Contraseña = hashedPassword;
+			}else{
+				return res.status(400).json({ message:"Las contraseñas no coinciden"});
+			}
+		}
+		const filter = { _id: id };
+		const opts = { new: true };
+		let modifyUser = await User.UsuariosAdmin.findOneAndUpdate(filter, update, opts);
+		const ModifiedUser = await User.UsuariosAdmin.findById(id);
+		const token = jwt.sign({Correo: ModifiedUser.Correo, id: ModifiedUser._id}, secret, {expiresIn: "1h"});
+		res.status(200).json({
+			result:ModifiedUser, token});
+	}catch(error){
+		res.status(500).json({message: "Algo salió mal durante la petición"});
+		console.log(error);
+	}
+}
+
 
 exports.deleteUserAccountAdmin = async(req,res) => {
 	const {Correo, password} = req.body;
@@ -213,6 +238,7 @@ exports.deleteUserAccountAdmin = async(req,res) => {
 
 exports.deleteUserAccountMovil = async(req,res) => {
 	const {Usuario} = req.body;
+	console.log(Usuario);
 	try {
 		const existingUser = await UserMov.UsuariosAppMovil.findOne({Usuario: Usuario});
 		if(!existingUser) return res.status(200).json({ message: "No existe el usuario"});
@@ -244,5 +270,51 @@ exports.deleteUserAccountMovil = async(req,res) => {
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 		console.log(error);
+	}
+}
+
+exports.modifyUserMovile = async(req,res) =>{
+	const {id, Correo, Nombre, Apellido, Usuario, Celular, Fecha_Nacimiento} = req.body;
+	try{
+		const existingUserOld = await UserMov.UsuariosAppMovil.findById(id);
+		if(!existingUserOld) return res.status(400).json({message: "No existe un usuario asociado"});
+		var update = {};
+		if(Correo === ""){
+			update.Correo=existingUserOld.Correo;
+		}else{
+			update.Correo = Correo;
+		}
+		if(Nombre === ""){
+			update.Nombre=existingUserOld.Nombre;
+		}else{
+			update.Nombre = Nombre;
+		}
+		if(Apellido === ""){
+			update.Apellido=existingUserOld.Apellido;
+		}else{
+			update.Apellido = Apellido;
+		}
+		if(Usuario === ""){
+			update.Usuario=existingUserOld.Usuario;
+		}else{
+			update.Usuario = Usuario;
+		}
+		if(Celular === ""){
+			update.Celular=existingUserOld.Celular;
+		}else{
+			update.Celular = Celular;
+		}
+		if(Fecha_Nacimiento === null){
+			update.Fecha_Nacimiento=existingUserOld.Fecha_Nacimiento;
+		}else{
+			update.Fecha_Nacimiento = Fecha_Nacimiento;
+		}
+		const filter = { _id: id };
+		const opts = { new: true };
+		let modifyUser = await UserMov.UsuariosAppMovil.findOneAndUpdate(filter, update, opts);
+		const ModifiedUser = await UserMov.UsuariosAppMovil.findById(id);
+		res.status(200).json({result:ModifiedUser});
+	}catch(error){
+		res.status(500).json({message: "Algo salió mal durante la petición"});
 	}
 }

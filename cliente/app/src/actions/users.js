@@ -1,4 +1,4 @@
-import {FETCH_ALL, FETCH_USER, FETCH_CUANTITY, START_LOADING, END_LOADING} from '../constants/actionTypes';
+import {FETCH_ALL, FETCH_USER,UPDATE,FETCH_CUANTITY, START_LOADING, END_LOADING, DELETE} from '../constants/actionTypes';
 import * as api from '../api/index.js';
 
 export const fetchUserCuantity = () => async(dispatch) =>{
@@ -21,14 +21,45 @@ export const getUsers = () => async(dispatch) => {
   }
 }
 
-export const getUser = (id) => async (dispatch) => {
+export const getUser = (id,history) => async (dispatch) => {
   try{
     dispatch({ type: START_LOADING });
     const { data } = await api.getUser(id);
-    console.log(data);
-    dispatch({type: FETCH_USER, payload: data})
+    dispatch({type: FETCH_USER, payload: data});
+    dispatch({type: END_LOADING});
+    history(0);
+  }catch(error){
+    console.log(error.message);
+  }
+}
+
+export const getUser1 = (id) => async (dispatch) => {
+  try{
+    dispatch({ type: START_LOADING });
+    const { data } = await api.getUser(id);
+    dispatch({type: FETCH_USER, payload: data});
     dispatch({type: END_LOADING});
   }catch(error){
     console.log(error.message);
+  }
+}
+
+export const modifyUserMovile = (formData, history) => async(dispatch) => {
+  try{
+      const { data } = await api.modifyUserMovile(formData);
+      dispatch({type: UPDATE, data});
+      history('/users');
+  }catch(error){
+      console.log(error);
+  }
+}
+
+export const deleteUserAccountMovil = (Usuario,history) => async(dispatch) => {
+  try{
+    api.deleteUserAccountMovil(Usuario);
+    dispatch({type:DELETE});
+    history(0);
+  }catch(error){
+    console.log(error);
   }
 }

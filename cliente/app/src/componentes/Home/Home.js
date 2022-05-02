@@ -14,29 +14,6 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 
-const drawerWidth = 240;
-
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-  })(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-  }));
-
-
-  
-const mdTheme = createTheme();
 
 function Home() {
 
@@ -54,10 +31,15 @@ function Home() {
   const logout= () => {
     dispatch({type: 'LOGOUT'})
     history('/')
+    history(0)
     setUser(null);
   }
 
-  
+  const singup = () => {
+    history('/signin');
+  }
+
+  const mdTheme = createTheme();
 
 
     return (   
@@ -65,7 +47,7 @@ function Home() {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
           {user?.result ? (
-            <AppBar position="absolute">
+            <MuiAppBar position="absolute">
               <Toolbar
                sx={{
                 pr: '24px', // keep right padding when drawer closed
@@ -85,9 +67,9 @@ function Home() {
               
                 <Button variant="contained" onClick={logout}>Cerrar Sesión</Button>
               </Toolbar>
-            </AppBar>
+            </MuiAppBar>
           ) : (
-            <AppBar position="absolute">
+            <MuiAppBar position="absolute">
               <Toolbar
                 sx={{
                   pr: '24px', // keep right padding when drawer closed
@@ -104,7 +86,7 @@ function Home() {
                 </Typography>
                 <Button component={Link} to="/signin" variant="contained" color="primary">Iniciar Sesión</Button>
               </Toolbar>
-            </AppBar>
+            </MuiAppBar>
           )
           }
           <Container maxWidth="100%" sx={{ mt: 9, mb: 4}}>
@@ -183,7 +165,7 @@ function Home() {
               Acá podrás encontrar todas las herramientas para administrar el aplicativo móvil de una manera fácil y sencilla.
               </Typography>
               <Box textAlign='center'>
-                <Button component={Link} style={{maxWidth: '250px', maxHeight: '40px'}} to="/signin" variant="contained" color="primary">Iniciar Sesión</Button>
+                <Button onClick={singup} style={{maxWidth: '250px', maxHeight: '40px'}} variant="contained" color="primary">Iniciar Sesión</Button>
               </Box>
             </Paper>
             )

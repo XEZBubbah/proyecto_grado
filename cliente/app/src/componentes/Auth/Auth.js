@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
 import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
@@ -8,6 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles';
 import Input from './input';
+import MyTheme from './MyTheme';
 import { signin } from '../../actions/auth';
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: ''};
@@ -29,10 +30,11 @@ const Auth = () => {
             dispatch(signin(form,history))
     }
 
+    
     return(
         
         <Box sx={{ display: 'flex' }}>
-            <MuiAppBar position="absolute">
+            <MuiAppBar position="absolute" color="primary">
               <Toolbar
                 sx={{
                   pr: '24px', // keep right padding when drawer closed
@@ -47,7 +49,6 @@ const Auth = () => {
                 >
                   BikeApp
                 </Typography>
-                <Button component={Link} to="/signin" variant="contained" color="primary">Iniciar Sesión</Button>
               </Toolbar>
             </MuiAppBar>
             <Container component="main" maxWidth="xs">

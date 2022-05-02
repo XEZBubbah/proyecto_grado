@@ -47,13 +47,14 @@ exports.fetchReport = async(req,res) => {
 }
 
 exports.editReport = async(req,res) => {
+	console.log(req.body);
 	const {Report_Id, Estado} = req.body;
 	try {
         const existingReport = await Reporte.Reportes.findById(Report_Id);
         if(!existingReport) return res.status(200).json({message : "El reporte no existe"});
 
         var update = {};
-            
+
         if(Estado === ""){
             console.log('Estado vacio');
         }else{
@@ -69,13 +70,13 @@ exports.editReport = async(req,res) => {
 }
 
 exports.deleteReport = async(req,res) => {
-	const {Report_Id} = req.body;
+	const {id} = req.params;
 	try {
-        const existingReport = await Reporte.Reportes.findById(Report_Id);
+        const existingReport = await Reporte.Reportes.findById(id);
         if(!existingReport) return res.status(200).json({message : "El reporte no existe"});
 
-        const deletedReport = await Reporte.Reportes.findByIdAndDelete(Report_Id);
-		res.status(200).json({result: deletedReport});
+        const deletedReport = await Reporte.Reportes.findByIdAndDelete(id);
+		res.status(200).json({result: "deletedReport", ReporteEliminado: deletedReport});
 	} catch (error) {
 		res.status(500).json({message: "Algo salió mal durante la petición"});
 	}
