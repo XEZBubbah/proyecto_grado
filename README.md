@@ -16,4 +16,7 @@ cd server
 npm i
 npm start
 ```
- 
+
+## Reminder:
+
+Eliminar la carpeta node_modules dentro de la carpeta server y ejecutar npm install para una instalación limpia
