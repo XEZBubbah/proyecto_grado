@@ -14,6 +14,16 @@ npm start
 
 cd server
 npm i
+
+crear archivo .env con las siguientes variables
+NODE_ENV = production
+#NODE_ENV = development
+#NODE_ENV = testing
+
+DATABASE_NAME = ""
+PASS = ""
+USER = ""
+
 npm start
 ```
 
