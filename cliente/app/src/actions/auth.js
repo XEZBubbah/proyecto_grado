@@ -26,6 +26,7 @@ export const signin = (formData, history) => async(dispatch) => {
         const { data } = await api.signin(formData);
         dispatch({type: AUTH, data});
         dispatch({type: SET});
+        history(0);
         history('/dashboard');
     } catch (error) {
         console.log(error);

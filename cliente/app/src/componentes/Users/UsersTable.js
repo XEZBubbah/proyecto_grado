@@ -57,7 +57,7 @@ const UsersTable = () => {
           }
         },
         {
-          field: "Eliminar",
+          field: "Inactivar",
           headerAlign: 'center', align: 'center', flex:'0,12',
           renderCell: (cellValues) => {
             return (

@@ -15,7 +15,7 @@ import EastIcon from '@mui/icons-material/East';
 import { getReport, getReports, eliminarReporte } from '../../actions/reports';
 import { deleteReport } from '../../api';
 
-const UsersTable = () => {
+const ReportsTable = () => {
 
     const dispatch = useDispatch();
     const history = useNavigate();
@@ -80,7 +80,7 @@ const UsersTable = () => {
           }
         },
         {
-          field: "Eliminar",
+          field: "Inactivar",
           headerAlign: 'center', align: 'center', flex:'0,12',
           renderCell: (cellValues) => {
             return (
@@ -120,4 +120,4 @@ const UsersTable = () => {
   )
 }
 
-export default UsersTable
+export default ReportsTable
