@@ -19,7 +19,8 @@ exports.getGroupItineraries = async(req, res) => {
         }
 
         var filteredItineraries = await Itinerary.Itinerarios.find({
-            Nombre_Itinerario : {$nin: itinerarynames}
+            Nombre_Itinerario : {$nin: itinerarynames},
+            Grupos_Nombre_Grupo: Grupo
         });
 
         res.status(200).json({result: filteredItineraries});
